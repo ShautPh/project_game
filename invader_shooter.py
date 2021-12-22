@@ -25,8 +25,8 @@ enemy_1 = tk.PhotoImage(file="./img/black-animy.png")
 enemy_2 = tk.PhotoImage(file="./img/blue-animy.png")
 enemy_3 = tk.PhotoImage(file="./img/red-animy.png")
 black_enemy = canvas.create_image(1100, 20, image=enemy_1) 
-blue_enemy = canvas.create_image(1100, 20, image=enemy_2) 
-red_enemy = canvas.create_image(1100, 20, image=enemy_3) 
+
+type_of_anemy = [enemy_1,enemy_2,enemy_3]
 
 #Move Up(player) 
 def goUp(event):
@@ -35,7 +35,6 @@ def goUp(event):
         if canvas.coords(player_pos)[1] > 50 :
             canvas.move(player_pos,0,-2)
         time.sleep(0.01)
-        
 #Move down(player) 
 def goDown(event):
     while True: 
@@ -59,14 +58,29 @@ def goRight(event):
         time.sleep(0.01)
 
 def enemy1_coming():
-    pos = canvas.coords(black_enemy)
-    if pos[0] > 550 and pos[1] < 600:
-        canvas.move(black_enemy, -10.15,10.15)
-        canvas.after(150, enemy1_coming)
-    elif pos[1] > 50: 
-        canvas.move(black_enemy, 0,-15)
-        canvas.after(150, enemy1_coming)
+    anemy_appear = random.choice(type_of_anemy)
+    position = random.randrange(25, 600)
+    pos = canvas.coords(anemy_appear)
+    canvas.create_image(1100, position, image=anemy_appear) 
+    if pos[1] > 25 :
+
+        canvas.move(anemy_appear, -10.15,0)
+    # if pos[0] > 550 and pos[1] < 600:
+    #     canvas.move(anemy_appear, -10.15,0)
+    # else:
+    #     canvas.create_image(1100, position, image=anemy_appear) 
+    # canvas.after(150, enemy1_coming)
+
 canvas.after(100,enemy1_coming)
+
+
+
+
+
+
+
+
+
 
 #Button to controll the player
 window.bind("<w>",goUp)
