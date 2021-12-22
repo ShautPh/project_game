@@ -22,11 +22,10 @@ player_pos = canvas.create_image(300, 400, image=player)
 
 #Move Up 
 def goUp(event):
-    
     while True: 
         canvas.update()
         canvas.move(player_pos,0,-1)
-        time.sleep(0.01)
+        time.sleep(0.001)
 #Move down 
 def goDown(event):
     while True: 
