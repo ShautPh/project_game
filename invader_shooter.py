@@ -83,24 +83,25 @@ def goRight(event):
         time.sleep(0.01)
 
 # create enemy to display on screen ===================
-positionY = 30
+
 def create_enemy():
     global amountOfEnemies,positionY
-    positionY += 100
+    # amountOfEnemies = random.randrange(3,6)
+    positionY = random.randrange(20,560)
     type_of_enemy = [enemy_1,enemy_2,enemy_3]
-    if amountOfEnemies < 5  :
+    if amountOfEnemies < 1:
         amountOfEnemies += 1
-        enemy = canvas.create_image(1200,positionY,image=random.choice(type_of_enemy))
+        enemy = canvas.create_image(1300,positionY,image=random.choice(type_of_enemy))
         listOfEnemies.append(enemy)
 
 def move_enemies():
-    global amountOfEnemies
+    global amountOfEnemies,positionY
     toPopEn = []
     for index in range(len(listOfEnemies)):
         eachEnemy = listOfEnemies[index]
         position = canvas.coords(eachEnemy)
         canvas.move(eachEnemy, -10, 0)
-        if position[0] < 50:
+        if position[0] < 30:
             # amountOfEnemies += 1
             canvas.delete(listOfEnemies[index])
             toPopEn.append(index)
@@ -109,8 +110,9 @@ def move_enemies():
         listOfEnemies.pop(i)
     canvas.after(1000,create_enemy)
     canvas.after(100,move_enemies)
-
-create_enemy()
+    if len(listOfEnemies) == 0 : 
+        amountOfEnemies = 0 
+        positionY = random.randrange(20,50)
 move_enemies()
 
 #Keys that player press to play game
