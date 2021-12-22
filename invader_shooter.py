@@ -27,7 +27,7 @@ enemy_3 = tk.PhotoImage(file="./img/red-animy.png")
 # list_of_enemies = [enemy_1,enemy_2,enemy_3]
 
 
-# Variable
+# Variable=================================
 amountOfEnemies = 0
 listOfEnemies = []
 # black_enemy = canvas.create_image(1200, 300, image=enemy_1) 
@@ -52,7 +52,8 @@ def goDown(event):
         time.sleep(0.01)
 #Move left(player)======================================================== 
 def goLeft(event):
-    canvas.move(player_pos,-2,0)
+    if canvas.coords(player_pos)[0] > 20:
+        canvas.move(player_pos,-2,0)
     while True: 
         canvas.update()
         if canvas.coords(player_pos)[0] > 20:
@@ -60,7 +61,8 @@ def goLeft(event):
         time.sleep(0.01)
 #Move right(player)======================================================
 def goRight(event):
-    canvas.move(player_pos,2,0)
+    if canvas.coords(player_pos)[0] < 500:
+        canvas.move(player_pos,2,0)
     while True: 
         canvas.update()
         if canvas.coords(player_pos)[0] < 500:
@@ -73,28 +75,27 @@ def create_enemy():
     global amountOfEnemies,positionY
     positionY += 100
     type_of_enemy = [enemy_1,enemy_2,enemy_3]
-    if amountOfEnemies < 5:
+    if amountOfEnemies < 5  :
         amountOfEnemies += 1
         enemy = canvas.create_image(1200,positionY,image=random.choice(type_of_enemy))
         listOfEnemies.append(enemy)
 
-
 def move_enemies():
-    global amountOfEnemies
+    global amountOfEnemies,positionY,listOfEnemies
+    remove_enemy = []
     for index in range(len(listOfEnemies)):
-        eachEnemy = listOfEnemies[index]
-        position = canvas.coords(eachEnemy)
-        if position[0] < 700:
-            canvas.after(1000,create_enemy)
-            amountOfEnemies = 0 
-        canvas.move(eachEnemy, -6, 0)
-
+        enemy = listOfEnemies[index]
+        position_of_enemy = canvas.coords(enemy)
+        canvas.move(enemy, -10, 0)
+        if position_of_enemy[0] < 500: 
+            remove_enemy.append(index)
     canvas.after(1000,create_enemy)
     canvas.after(100,move_enemies)
-    
-canvas.after(100,create_enemy)
-move_enemies()
+    for i in remove_enemy:
+        listOfEnemies.pop(i)
 
+create_enemy()
+move_enemies()
 
 #Keys that player press to play game
 window.bind("<w>",goUp)
