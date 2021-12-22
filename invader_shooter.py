@@ -16,6 +16,7 @@ canvas = tk.Canvas(frame)
 
 
 # Add Image
+canvas.create_text(300,300, text="Start",tags="start_the_game",fill="white", font=("purisa",20))
 # Background 
 bg = tk.PhotoImage(file="./img/start-game.png")
 bg_game = tk.PhotoImage(file="./img/battle-game.png")
@@ -23,8 +24,7 @@ bg_game = tk.PhotoImage(file="./img/battle-game.png")
 # Player image........................
 player = tk.PhotoImage(file="./img/player.png")
 
-
-# # Background image
+# Background image
 # label1 = tk.Label(window, image=bg)
 # label1.place(x=0, y=0)
 
@@ -38,6 +38,7 @@ enemy_3 = tk.PhotoImage(file="./img/red-animy.png")
 # list_of_enemies = [enemy_1,enemy_2,enemy_3]
 
 
+# In process of the game=====================================
 # Variable=================================
 amountOfEnemies = 0
 listOfEnemies = []
@@ -45,9 +46,6 @@ listOfEnemies = []
 battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game) 
 player_pos = canvas.create_image(300, 400, image=player)
 
-# black_enemy = canvas.create_image(1200, 300, image=enemy_1) 
-# blue_enemy = canvas.create_image(1200, 350, image=enemy_2) 
-# red_enemy = canvas.create_image(1200, 400, image=enemy_3) 
 
 
 #Move Up(player) ==========================================================
@@ -96,18 +94,21 @@ def create_enemy():
         listOfEnemies.append(enemy)
 
 def move_enemies():
-    global amountOfEnemies,positionY,listOfEnemies
-    remove_enemy = []
+    global amountOfEnemies
+    toPopEn = []
     for index in range(len(listOfEnemies)):
-        enemy = listOfEnemies[index]
-        position_of_enemy = canvas.coords(enemy)
-        canvas.move(enemy, -10, 0)
-        if position_of_enemy[0] < 500: 
-            remove_enemy.append(index)
+        eachEnemy = listOfEnemies[index]
+        position = canvas.coords(eachEnemy)
+        canvas.move(eachEnemy, -10, 0)
+        if position[0] < 50:
+            # amountOfEnemies += 1
+            canvas.delete(listOfEnemies[index])
+            toPopEn.append(index)
+
+    for i in toPopEn:
+        listOfEnemies.pop(i)
     canvas.after(1000,create_enemy)
     canvas.after(100,move_enemies)
-    for i in remove_enemy:
-        listOfEnemies.pop(i)
 
 create_enemy()
 move_enemies()
