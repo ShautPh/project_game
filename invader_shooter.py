@@ -55,7 +55,6 @@ def goUp(event):
         if canvas.coords(player_pos)[1] > 50 :
             canvas.move(player_pos,0,-4)
         time.sleep(0.01)
-
 #Move down(player) ======================================================
 def goDown(event):
     while True: 
@@ -87,7 +86,7 @@ def goRight(event):
 def create_enemy():
     global amountOfEnemies,positionY
     # amountOfEnemies = random.randrange(3,6)
-    positionY = random.randrange(20,560)
+    positionY = random.randrange(30,560)
     type_of_enemy = [enemy_1,enemy_2,enemy_3]
     if amountOfEnemies < 1:
         amountOfEnemies += 1
@@ -100,21 +99,21 @@ def move_enemies():
     for index in range(len(listOfEnemies)):
         eachEnemy = listOfEnemies[index]
         position = canvas.coords(eachEnemy)
-        canvas.move(eachEnemy, -10, 0)
+        canvas.move(eachEnemy, -20, 0)
         if position[0] < 30:
-            # amountOfEnemies += 1
+            amountOfEnemies += 1
             canvas.delete(listOfEnemies[index])
             toPopEn.append(index)
 
     for i in toPopEn:
         listOfEnemies.pop(i)
-    canvas.after(1000,create_enemy)
+    canvas.after(10,create_enemy)
     canvas.after(100,move_enemies)
-    if len(listOfEnemies) == 0 : 
+    if len(listOfEnemies) == 0: 
         amountOfEnemies = 0 
         positionY = random.randrange(20,50)
+canvas.after(10,create_enemy)
 move_enemies()
-
 #Keys that player press to play game
 window.bind("<w>",goUp)
 window.bind("<s>",goDown)
