@@ -16,12 +16,24 @@ canvas = tk.Canvas(frame)
 player_pos = canvas.create_rectangle(300,300,400,350, fill="red")
 
 #Move Up 
+def goUp(event):
+
+    while True: 
+        canvas.update()
+        canvas.move(player_pos,0,-1)
+        time.sleep(0.01)
 #Move down 
+def goDown(event):
+    while True: 
+        canvas.update()
+        canvas.move(player_pos,0,1)
+        time.sleep(0.001)
 #Move left 
 #Move right
 
 #Button to controll the player
-canvas.pack("<w>",goUp)
+window.bind("<w>",goUp)
+window.bind("<s>",goDown)
 #display window
 canvas.pack(expand=True,fill="both")
 frame.pack(expand=True,fill="both")
