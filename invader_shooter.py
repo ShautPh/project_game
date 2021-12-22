@@ -15,7 +15,13 @@ window.title("Space Invader by (Sauth and MengYi)")
 canvas = tk.Canvas(frame)
 player_pos = canvas.create_rectangle(300,300,400,350, fill="red")
 
+#Move Up 
+#Move down 
+#Move left 
+#Move right
 
+#Button to controll the player
+canvas.pack("<w>",goUp)
 #display window
 canvas.pack(expand=True,fill="both")
 frame.pack(expand=True,fill="both")
