@@ -41,14 +41,10 @@ def goRight(event):
     canvas.move(player_pos, 20, 0)
 
 #Button to controll the player
-<<<<<<< HEAD
 window.bind("<w>",goUp)
 window.bind("<s>",goDown)
-=======
-# canvas.pack("<w>",goUp)
 window.bind("<d>",goRight)
 window.bind("<a>",goLeft)
->>>>>>> b96da25ca8f104450fa946922b8a95b8d82e28f7
 #display window
 canvas.pack(expand=True,fill="both")
 frame.pack(expand=True,fill="both")
