@@ -10,10 +10,13 @@ window = tk.Tk()
 window.geometry("1400x700")
 
 #The title of the window
-fram = tk.Frame()
+frame = tk.Frame()
 window.title("Space Invader by (Sauth and MengYi)")
+canvas = tk.Canvas(frame)
+player_pos = canvas.create_rectangle(300,300,400,350, fill="red")
 
-#Add image file
 
 #display window
+canvas.pack(expand=True,fill="both")
+frame.pack(expand=True,fill="both")
 window.mainloop()
