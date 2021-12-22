@@ -7,7 +7,7 @@ from tkinter.constants import ANCHOR
 
 window = tk.Tk()
 #Adjust size of the window
-window.geometry("1400x700")
+window.geometry("1200x650")
 
 #The title of the window
 frame = tk.Frame()
@@ -16,35 +16,56 @@ canvas = tk.Canvas(frame)
 
 
 # Add Image
+# Player image........................
 player = tk.PhotoImage(file="./img/player.png")
 player_pos = canvas.create_image(300, 400, image=player)
 
+# Enemies image.....................
+enemy_1 = tk.PhotoImage(file="./img/black-animy.png")
+black_enemy = canvas.create_image(1100, 400, image=enemy_1) 
 
-#Move Up 
+#Move Up(player) 
 def goUp(event):
     while True: 
         canvas.update()
-        canvas.move(player_pos,0,-1)
-        time.sleep(0.001)
-#Move down 
+        if canvas.coords(player_pos)[1] > 50 :
+            canvas.move(player_pos,0,-2)
+        time.sleep(0.01)
+        
+#Move down(player) 
 def goDown(event):
     while True: 
         canvas.update()
-        canvas.move(player_pos,0,1)
-        time.sleep(0.001)
-#Move left 
+        if canvas.coords(player_pos)[1] < 600:
+            canvas.move(player_pos,0,2)
+        time.sleep(0.01)
+#Move left(player) 
 def goLeft(event):
     while True: 
         canvas.update()
-        canvas.move(player_pos,-1,0)
-        time.sleep(0.001)
-#Move right
+        if canvas.coords(player_pos)[0] > 20:
+            canvas.move(player_pos,-2,0)
+        time.sleep(0.01)
+#Move right(player)
 def goRight(event):
     while True: 
         canvas.update()
-        canvas.move(player_pos,1,0)
+        if canvas.coords(player_pos)[0] < 500:
+            canvas.move(player_pos,2,0)
+        time.sleep(0.01)
+
+def enemy_coming():
+    while True: 
+        canvas.update()
+        if canvas.coords(black_enemy)[0] > 700:
+            canvas.move(black_enemy,-1,0)
+        elif canvas.coords(black_enemy)[1] > 50 and canvas.coords(black_enemy)[0]== 700:
+            canvas.move(black_enemy,0,-1)
+        elif canvas.coords(black_enemy)[1] > 50 and canvas.coords(black_enemy)[0] < 700:
+            canvas.move(black_enemy,0,1)
         time.sleep(0.001)
 
+canvas.after(200,enemy_coming)
 #Button to controll the player
 window.bind("<w>",goUp)
 window.bind("<s>",goDown)
