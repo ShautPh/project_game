@@ -28,68 +28,72 @@ enemy_3 = tk.PhotoImage(file="./img/red-animy.png")
 
 
 # Variable
-amountOfEnemies = 2
+amountOfEnemies = 0
+listOfEnemies = []
+# black_enemy = canvas.create_image(1200, 300, image=enemy_1) 
+# blue_enemy = canvas.create_image(1200, 350, image=enemy_2) 
+# red_enemy = canvas.create_image(1200, 400, image=enemy_3) 
 
-black_enemy = canvas.create_image(1200, 300, image=enemy_1) 
-blue_enemy = canvas.create_image(1200, 350, image=enemy_2) 
-red_enemy = canvas.create_image(1200, 400, image=enemy_3) 
 
-
-#Move Up(player) 
+#Move Up(player) ==========================================================
 def goUp(event):
     while True: 
         canvas.update()
         if canvas.coords(player_pos)[1] > 50 :
-            canvas.move(player_pos,0,-2)
+            canvas.move(player_pos,0,-4)
         time.sleep(0.01)
-#Move down(player) 
+
+#Move down(player) ======================================================
 def goDown(event):
     while True: 
         canvas.update()
         if canvas.coords(player_pos)[1] < 600:
-            canvas.move(player_pos,0,2)
+            canvas.move(player_pos,0,4)
         time.sleep(0.01)
-#Move left(player) 
+#Move left(player)======================================================== 
 def goLeft(event):
+    canvas.move(player_pos,-2,0)
     while True: 
         canvas.update()
         if canvas.coords(player_pos)[0] > 20:
             canvas.move(player_pos,-2,0)
         time.sleep(0.01)
-#Move right(player)
+#Move right(player)======================================================
 def goRight(event):
+    canvas.move(player_pos,2,0)
     while True: 
         canvas.update()
         if canvas.coords(player_pos)[0] < 500:
             canvas.move(player_pos,2,0)
         time.sleep(0.01)
 
+# create enemy to display on screen ===================
+positionY = 30
+def create_enemy():
+    global amountOfEnemies,positionY
+    positionY += 100
+    type_of_enemy = [enemy_1,enemy_2,enemy_3]
+    if amountOfEnemies < 5:
+        amountOfEnemies += 1
+        enemy = canvas.create_image(1200,positionY,image=random.choice(type_of_enemy))
+        listOfEnemies.append(enemy)
 
-def appear_enemies():
-    list_of_enemies = [enemy_1,enemy_2,enemy_3]
-    global black_enemy,blue_enemy,red_enemy, amountOfEnemies
-    position = random.randrange(25, 500)
-    pos_enemy = canvas.coords(black_enemy)
-    positionOfenemy = random.randrange(500, 800)
-    canvas.move(black_enemy, -10.50,0)
-    canvas.move(blue_enemy, -12.50,0)
-    canvas.move(red_enemy, -11.50,0)
-    # if amountOfEnemies <= 10:
-    if pos_enemy[0] > positionOfenemy:
-        canvas.move(black_enemy, 0,2)
-        canvas.move(blue_enemy, 0,-2)
-        canvas.move(red_enemy, 0,3)
-        print(pos_enemy[0])
-    elif pos_enemy[0] < positionOfenemy:
-        amountOfEnemies += 3
-        black_enemy = canvas.create_image(1200, position, image=enemy_1)
-        blue_enemy = canvas.create_image(1200, position + 100, image=enemy_2)
-        red_enemy = canvas.create_image(1200, position+ 50, image=enemy_3)
-    canvas.after(100, appear_enemies)
 
-canvas.after(100, appear_enemies)
-# canvas.after(1000,appear_enemies)
+def move_enemies():
+    global amountOfEnemies
+    for index in range(len(listOfEnemies)):
+        eachEnemy = listOfEnemies[index]
+        position = canvas.coords(eachEnemy)
+        if position[0] < 700:
+            canvas.after(1000,create_enemy)
+            amountOfEnemies = 0 
+        canvas.move(eachEnemy, -6, 0)
 
+    canvas.after(1000,create_enemy)
+    canvas.after(100,move_enemies)
+    
+canvas.after(100,create_enemy)
+move_enemies()
 
 
 #Keys that player press to play game
