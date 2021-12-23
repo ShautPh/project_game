@@ -12,13 +12,19 @@ window.geometry("1200x650")
 #The title of the window
 frame = tk.Frame()
 window.title("Space Invader by (Sauth and MengYi)")
-canvas = tk.Canvas(frame)
+canvas = tk.Canvas()
 
 
 # Add Image
+# Background 
+bg = tk.PhotoImage(file="./img/start-game.png")
 # Player image........................
 player = tk.PhotoImage(file="./img/player.png")
 player_pos = canvas.create_image(300, 400, image=player)
+
+# # Background image
+# label1 = tk.Label(window, image=bg)
+# label1.place(x=0, y=0)
 
 # Enemies image.....................
 enemy_1 = tk.PhotoImage(file="./img/black-animy.png")
@@ -66,10 +72,9 @@ def goRight(event):
 
 
 def appear_enemies():
-    list_of_enemies = [enemy_1,enemy_2,enemy_3]
     global black_enemy,blue_enemy,red_enemy, amountOfEnemies
-    position = random.randrange(25, 500)
     pos_enemy = canvas.coords(black_enemy)
+    position = random.randrange(25, 500)
     positionOfenemy = random.randrange(500, 800)
     canvas.move(black_enemy, -10.50,0)
     canvas.move(blue_enemy, -12.50,0)
@@ -79,16 +84,11 @@ def appear_enemies():
         canvas.move(black_enemy, 0,2)
         canvas.move(blue_enemy, 0,-2)
         canvas.move(red_enemy, 0,3)
-        print(pos_enemy[0])
-    elif pos_enemy[0] < positionOfenemy:
-        amountOfEnemies += 3
-        black_enemy = canvas.create_image(1200, position, image=enemy_1)
-        blue_enemy = canvas.create_image(1200, position + 100, image=enemy_2)
-        red_enemy = canvas.create_image(1200, position+ 50, image=enemy_3)
     canvas.after(100, appear_enemies)
 
-canvas.after(100, appear_enemies)
-# canvas.after(1000,appear_enemies)
+
+# canvas.after(100, appear_enemies)
+canvas.after(100,appear_enemies)
 
 
 
