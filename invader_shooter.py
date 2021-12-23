@@ -18,6 +18,8 @@ canvas = tk.Canvas()
 # Add Image
 # Background 
 bg = tk.PhotoImage(file="./img/start-game.png")
+bg_game = tk.PhotoImage(file="./img/battle-game.png")
+
 # Player image........................
 player = tk.PhotoImage(file="./img/player.png")
 player_pos = canvas.create_image(300, 400, image=player)
@@ -26,7 +28,10 @@ player_pos = canvas.create_image(300, 400, image=player)
 # label1 = tk.Label(window, image=bg)
 # label1.place(x=0, y=0)
 
+
+
 # Enemies image.....................
+
 enemy_1 = tk.PhotoImage(file="./img/black-animy.png")
 enemy_2 = tk.PhotoImage(file="./img/blue-animy.png")
 enemy_3 = tk.PhotoImage(file="./img/red-animy.png")
@@ -36,6 +41,8 @@ enemy_3 = tk.PhotoImage(file="./img/red-animy.png")
 # Variable
 amountOfEnemies = 2
 
+# Display
+battle_game = tk.Label(window, image=bg_game).place(x=0, y=0)
 black_enemy = canvas.create_image(1200, 300, image=enemy_1) 
 blue_enemy = canvas.create_image(1200, 350, image=enemy_2) 
 red_enemy = canvas.create_image(1200, 400, image=enemy_3) 
