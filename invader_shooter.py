@@ -92,7 +92,7 @@ def create_enemy():
     type_of_enemy = [enemy_1,enemy_2,enemy_3]
     if amountOfEnemies < 5  :
         amountOfEnemies += 1
-        enemy = canvas.create_image(1200,positionY,image=random.choice(type_of_enemy))
+        enemy = canvas.create_image(1200,positionY,image=random.choice(type_of_enemy), tags="all_enemy")
         listOfEnemies.append(enemy)
 
 def move_enemies():
@@ -100,14 +100,15 @@ def move_enemies():
     remove_enemy = []
     for index in range(len(listOfEnemies)):
         enemy = listOfEnemies[index]
-        position_of_enemy = canvas.coords(enemy)
+        position_of_enemy = canvas.coords(enemy)[0]
         canvas.move(enemy, -10, 0)
-        if position_of_enemy[0] < 500: 
-            remove_enemy.append(index)
+        if position_of_enemy < -20: 
+            canvas.delete("all_enemy")
+        # else:
+        #     for i in range(len(remove_enemy)):
     canvas.after(1000,create_enemy)
     canvas.after(100,move_enemies)
-    for i in remove_enemy:
-        listOfEnemies.pop(i)
+    
 
 create_enemy()
 move_enemies()
