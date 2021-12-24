@@ -78,6 +78,10 @@ def in_processing():
     global player_pos,bullet_of_player,player_socre,battle_image
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
     # CALL THE FUNCTION TO PROGRESS=========================================
+    x = 86
+    for i in range(5):
+        canvas.create_rectangle(x,22,x+40,50,fill="red",outline="",tags="blood")
+        x += 46
     player_socre = canvas.create_text(160,100,text="SCORE: 0",font=("Purisa", 16, BOLD), fill="white",tags=("startTheGame","start"))
     player_pos = canvas.create_image(300, 400, image=player)  
     canvas.after(500,create_enemy)
@@ -219,26 +223,24 @@ def player_bullet_touch_ennemy():
     else:
         canvas.itemconfig(player_socre,text= "SCORES: "+ str(SCORE))
 
-# def main_ennemy():
-#     global last_main_ennemy
-#     last_main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
-#     move_main_ennemy()
+def main_ennemy():
+    global last_main_ennemy
+    last_main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
+    move_main_ennemy()
 
-# def move_main_ennemy():
-#     canvas.move(last_main_ennemy,-50,0)
-#     canvas.after(3000,move_main_ennemy_go_right)
-# def move_main_ennemy_go_right():
-#     canvas.move(last_main_ennemy,50,0)
-#     canvas.after(3000,move_main_ennemy_go_Down)
-# def move_main_ennemy_go_Down():
-#     canvas.move(last_main_ennemy,0,40)
-#     canvas.after(3000,move_main_ennemy_go_up)
-# def move_main_ennemy_go_up():
-#     canvas.move(last_main_ennemy,0,-40)
-#     canvas.after(3000,move_main_ennemy)
-#     else:
-#         move_main_ennemy_go_up()
-#     canvas.after(100,move_main_ennemy)
+def move_main_ennemy():
+    canvas.move(last_main_ennemy,-50,0)
+    canvas.after(3000,move_main_ennemy_go_right)
+def move_main_ennemy_go_right():
+    canvas.move(last_main_ennemy,50,0)
+    canvas.after(3000,move_main_ennemy_go_Down)
+def move_main_ennemy_go_Down():
+    canvas.move(last_main_ennemy,0,40)
+    canvas.after(3000,move_main_ennemy_go_up)
+def move_main_ennemy_go_up():
+    canvas.move(last_main_ennemy,0,-40)
+    canvas.after(3000,move_main_ennemy)
+    canvas.after(100,move_main_ennemy)
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
