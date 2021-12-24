@@ -61,7 +61,7 @@ def loading_the_process():
     canvas.create_text(600,300,text="Loading...", font= ("Purisa", 40,BOLD), fill="red")
     canvas.create_rectangle(450, 350,750,380, fill="#cccccc", outline= "")
     # loading_sign ()
-    canvas.after(random.randrange(1000,6000),in_processing)
+    canvas.after(random.randrange(1000,5000),in_processing)
 # d
 # def loading_sign ():
 
