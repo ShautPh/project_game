@@ -25,7 +25,7 @@ canvas = tk.Canvas(frame)
 # BACKGROUND IN THE PROCESS=====================
 bg = tk.PhotoImage(file="./img/start-game.png")
 bg_game = tk.PhotoImage(file="./img/battle-game.png")
-
+loading_background =  tk.PhotoImage(file="./img/loading_bg.png")
 # # PLAYER IMAGE........................
 player = tk.PhotoImage(file="./img/player.png")
 # ENNEMY IMAGES.....................
@@ -57,6 +57,7 @@ def start_process(event):
         canvas.after(100,loading_the_process)
 
 def loading_the_process():
+    canvas.create_image(0,0,image= loading_background, anchor = NW)
     canvas.create_text(600,300,text="Loading...", font= ("Purisa", 40,BOLD), fill="red")
     canvas.after(random.randrange(1000,6000),in_processing)
 
