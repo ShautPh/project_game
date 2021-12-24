@@ -112,37 +112,33 @@ def onDPressed(event):
 
 # MOVE POSITION BULLET BY USING KEY PRESS=====================================
 def onSpacePressed(event):
-    canvas.after(500, create_new_bullet)
-    canvas.after(500, move_bullet)
+    create_new_bullet()
+    move_bullet()
 
 #==============================================================================
 def goUp():
     global shooted
     if getPlayerPosition()[1] > 50 :
         canvas.move(player_pos, 0, -MOVE_PLAYER_INCREMENT)
-        # if not shooted:
-        #     canvas.move(bullet_of_player, 0, -MOVE_PLAYER_INCREMENT)
+
 #MOVE PLAYER DOWN ======================================================
 def goDown():
     global shooted
     if getPlayerPosition()[1] < 600:
         canvas.move(player_pos,0,MOVE_PLAYER_INCREMENT)
-        # if not shooted:
-        #     canvas.move(bullet_of_player, 0, MOVE_PLAYER_INCREMENT)
+
 #MOVE PLAYER TO LEFT======================================================== 
 def goLeft():
     global shooted
     if getPlayerPosition()[0] > 20:
         canvas.move(player_pos,-MOVE_PLAYER_INCREMENT,0)
-        # if not shooted:
-        #     canvas.move(bullet_of_player, -MOVE_PLAYER_INCREMENT, 0)
+
 #MOVE PLAYER TO RIGHT======================================================
 def goRight():
     global shooted
     if getPlayerPosition()[0] < 1000:
         canvas.move(player_pos,MOVE_PLAYER_INCREMENT,0)
-        # if not shooted:
-        #     canvas.move(bullet_of_player, MOVE_PLAYER_INCREMENT, 0)
+
 # CREATE THE ENNEMIES TO DISPLAY ON SCREEN ===================
 def create_enemy():
     global newEnnemyStartY
@@ -171,29 +167,13 @@ def move_enemies():
 
 # CREATE THE BULLET TO DISPLAY ON SCREEN ===================
 def create_new_bullet():
-    # global bullet_of_player, shooted, listOfBullet
-    # shooted = False
-    # pos = canvas.coords(player_pos)
-    # bullet_of_player = canvas.create_image(pos[0] + 80, pos[1], image=bullet_player, tags="player_bullet")
-    # # canvas.after(1000,create_new_bullet)
-    global bullet_of_player, shooted
-    if len(listOfBullet) < 6 :
-        pos = canvas.coords(player_pos)
-        bullet_of_player = canvas.create_image(pos[0] + 80, pos[1], image=bullet_player, tags="player_bullet")
-        listOfBullet.append(bullet_of_player)
-        print(listOfBullet)
-    canvas.after(1000, create_new_bullet)
+    global listOfBullet
+    bullet_of_player = canvas.create_image(getPlayerPosition()[0] + 80,getPlayerPosition()[1], image=bullet_player, tags="player_bullet")
+    listOfBullet.append(bullet_of_player)
+
 
 # MOVE BULLET OF PLAYER TO THE ENNEMIES ==============================
 def move_bullet():
-    # print(listOfEnemies)
-    # canvas.move(bullet_of_player, 20, 0)
-    # pos = canvas.coords(bullet_of_player)
-    # if pos[0] > 1200:
-    #     canvas.delete("player_bullet")
-    #     canvas.after(100, create_new_bullet)
-    # else:
-    #     canvas.after(20, move_bullet)
     global listOfBullet
     bulletToRemove = []
     for bullet in listOfBullet:
@@ -201,10 +181,11 @@ def move_bullet():
         pos = canvas.coords(bullet)
         if pos[0] > 1200:
             bulletToRemove.append(bullet)
-    for bullet in bulletToRemove:
-        listOfBullet.remove(bullet)
-        canvas.delete(bullet)
+    for bullets in bulletToRemove:
+        listOfBullet.remove(bullets)
+        canvas.delete(bullets)
     canvas.after(100,move_bullet)
+    
     
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
