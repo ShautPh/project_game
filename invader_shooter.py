@@ -48,23 +48,28 @@ display_start_game()
 #EXIT THE WINDOW TO STOP THE PROGRAME-----------------------------
 def close_the_window(event):
     window.destroy()
-
+#START GAME============
 def start_process(event):
     global display_game
     canvas.delete("start")
     display_game = True
     if display_game: 
         canvas.after(100,loading_the_process)
-
+#LOADING TIME BEFORE ALLOW PLAYER TO PLAY GAME===============================
 def loading_the_process():
     canvas.create_image(0,0,image= loading_background, anchor = NW)
     canvas.create_text(600,300,text="Loading...", font= ("Purisa", 40,BOLD), fill="red")
+    canvas.create_rectangle(450, 350,750,380, fill="#cccccc", outline= "")
+    # loading_sign ()
     canvas.after(random.randrange(1000,6000),in_processing)
+# d
+# def loading_sign ():
 
+#GAME IN PROCESSING-------------------------------------------
 def in_processing():
     global player_pos
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
-    # CALL THE FUNCTION TO P/ROGRESS=========================================
+    # CALL THE FUNCTION TO PROGRESS=========================================
     canvas.after(500,create_enemy)
     canvas.after(500,move_enemies)
     player_pos = canvas.create_image(300, 400, image=player)    
@@ -73,20 +78,17 @@ def in_processing():
 # # ----------------------------------------------
 MOVE_PLAYER_INCREMENT = 16
 ENNEMY_IMAGES = [black_ennemy_image,blue_ennemy_image,red_ennemy_image]
-
 # # ----------------------------------------------
 # # VARIABLES
 # # ----------------------------------------------
 listOfEnemies = []
-# player_pos = canvas.create_image(300, 400, image=player)
-
 newEnnemyStartX = 1200
 newEnnemyStartY = 30
+
 
 # # THE POSITION OF THE PLAYER================================================
 def getPlayerPosition():
     return canvas.coords(player_pos)
-
 # MOVE POSITION PLAYER BY USING KEY PRESS=====================================
 def onWPressed(event):
     goUp()
@@ -96,12 +98,11 @@ def onAPressed(event):
     goLeft()
 def onDPressed(event):
     goRight()
-
+#==============================================================================
 #MOVE PLAYER UP ==========================================================
 def goUp():
     if getPlayerPosition()[1] > 50 :
         canvas.move(player_pos, 0, -MOVE_PLAYER_INCREMENT)
-
 #MOVE PLAYER DOWN ======================================================
 def goDown():
     if getPlayerPosition()[1] < 600:
@@ -143,6 +144,22 @@ def move_enemies():
         listOfEnemies.remove(ennemy)
         canvas.delete(ennemy)
     canvas.after(100,move_enemies)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
