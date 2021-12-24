@@ -24,6 +24,8 @@ bg_game = tk.PhotoImage(file="./img/battle-game.png")
 
 # PLAYER IMAGE........................
 player = tk.PhotoImage(file="./img/player.png")
+# PLAYER BULLET
+bullet_player = tk.PhotoImage(file="./img/bullet_player.png")
 
 # Background image
 # label1 = tk.Label(window, image=bg)
@@ -50,6 +52,7 @@ ENNEMY_IMAGES = [black_ennemy_image,blue_ennemy_image,red_ennemy_image]
 # ----------------------------------------------
 listOfEnemies = []
 player_pos = canvas.create_image(300, 400, image=player)
+bullet_of_player = canvas.create_image(300, 400, image=bullet_player)
 
 newEnnemyStartX = 1200
 newEnnemyStartY = 30
