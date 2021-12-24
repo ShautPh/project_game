@@ -70,7 +70,7 @@ def loading_the_process():
 
 #GAME IN PROCESSING-------------------------------------------
 def in_processing():
-    global player_pos,bullet_of_player
+    global player_pos,bullet_of_player,battle_image
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
     # CALL THE FUNCTION TO PROGRESS=========================================
     canvas.after(500,create_enemy)
