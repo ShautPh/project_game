@@ -170,7 +170,7 @@ def move_enemies():
 
 # CREATE THE BULLET TO DISPLAY ON SCREEN ===================
 def create_new_bullet():
-    global bullet_of_player, shooted
+    global bullet_of_player, shooted, listOfBullet
     shooted = False
     pos = canvas.coords(player_pos)
     bullet_of_player = canvas.create_image(pos[0] + 80, pos[1], image=bullet_player, tags="player_bullet")
@@ -178,14 +178,15 @@ def create_new_bullet():
 
 # MOVE BULLET OF PLAYER TO THE ENNEMIES ==============================
 def move_bullet():
+    print(listOfEnemies)
     canvas.move(bullet_of_player, 20, 0)
     pos = canvas.coords(bullet_of_player)
-    if pos[0] < 1200:
-        canvas.after(20, move_bullet)
-    else:
+    if pos[0] > 1200:
         canvas.delete("player_bullet")
         canvas.after(100, create_new_bullet)
-
+    else:
+        canvas.after(20, move_bullet)
+    
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
