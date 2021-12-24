@@ -50,12 +50,17 @@ ENNEMY_IMAGES = [black_ennemy_image,blue_ennemy_image,red_ennemy_image]
 # ----------------------------------------------
 # VARIABLES
 # ----------------------------------------------
-listOfEnemies = []
-player_pos = canvas.create_image(300, 400, image=player)
-bullet_of_player = canvas.create_image(300, 400, image=bullet_player)
-
 newEnnemyStartX = 1200
 newEnnemyStartY = 30
+playerStartX = 300
+playerStartY = 400
+BulletPlayerStartX = 380
+BulletPlayerStartY = 400
+posOfEachEnnemy = []
+shooted = False
+listOfEnemies = []
+player_pos = canvas.create_image(playerStartX, playerStartY, image=player)
+bullet_of_player = canvas.create_image(BulletPlayerStartX, BulletPlayerStartY, image=bullet_player, tags="player_bullet")
 
 
 # THE POSITION OF THE PLAYER===================
@@ -72,23 +77,44 @@ def onAPressed(event) :
 def onDPressed(event) :
     goRight()
 
+# MOVE POSITION BULLET BY USING KEY PRESS=====================================
+def onSpacePressed(event):
+    global shooted
+    shooted = True
+    move_bullet()
+
+
 #MOVE PLAYER UP ==========================================================
 def goUp():
+    global shooted
     if getPlayerPosition()[1] > 50 :
         canvas.move(player_pos, 0, -MOVE_PLAYER_INCREMENT)
-
+        if not shooted:
+            canvas.move(bullet_of_player, 0, -MOVE_PLAYER_INCREMENT)
 #MOVE PLAYER DOWN ======================================================
 def goDown():
+    global shooted
     if canvas.coords(player_pos)[1] < 600:
         canvas.move(player_pos,0,MOVE_PLAYER_INCREMENT)
+        if not shooted:
+            canvas.move(bullet_of_player, 0, MOVE_PLAYER_INCREMENT)
+
 #MOVE PLAYER TO LEFT======================================================== 
 def goLeft():
+    global shooted
     if canvas.coords(player_pos)[0] > 20:
         canvas.move(player_pos,-MOVE_PLAYER_INCREMENT,0)
+        if not shooted:
+            canvas.move(bullet_of_player, -MOVE_PLAYER_INCREMENT, 0)
+
 #MOVE PLAYER TO RIGHT======================================================
 def goRight():
+    global shooted
     if canvas.coords(player_pos)[0] < 1000:
         canvas.move(player_pos,MOVE_PLAYER_INCREMENT,0)
+        if not shooted:
+            canvas.move(bullet_of_player, MOVE_PLAYER_INCREMENT, 0)
+
 
 
 
@@ -104,20 +130,38 @@ def create_enemy():
     newEnnemyStartY = 30
     canvas.after(1000, create_enemy)
 
-
 # MOVE POSITION OF THE ENNEMIES TO ANYWHERE===========================
 def move_enemies():
-    global listOfEnemies
+    global listOfEnemies, posOfEachEnnemy
     ennemiesToBeDeleted = []
     for enemy in listOfEnemies:
         canvas.move(enemy, -10, 0)
-        position = canvas.coords(enemy)
-        if position[0] < 50:
+        posOfEachEnnemy = canvas.coords(enemy)
+        if posOfEachEnnemy[0] < 50:
             ennemiesToBeDeleted.append(enemy)
     for ennemy in ennemiesToBeDeleted:
         listOfEnemies.remove(ennemy)
         canvas.delete(ennemy)
     canvas.after(100,move_enemies)
+
+# CREATE THE BULLET TO DISPLAY ON SCREEN ===================
+def create_new_bullet():
+    global bullet_of_player, shooted
+    shooted = False
+    pos = canvas.coords(player_pos)
+    bullet_of_player = canvas.create_image(pos[0] + 80, pos[1], image=bullet_player, tags="player_bullet")
+
+
+# MOVE BULLET OF PLAYER TO THE ENNEMIES ==============================
+def move_bullet():
+    canvas.move(bullet_of_player, 20, 0)
+    pos = canvas.coords(bullet_of_player)
+    if pos[0] < 900:
+        canvas.after(20, move_bullet)
+    else:
+        canvas.delete("player_bullet")
+        canvas.after(100, create_new_bullet)
+
 
 #CALL THE FUNCTION TO PROGRESS=========================================
 create_enemy()
@@ -129,6 +173,7 @@ window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
 window.bind("<d>",onDPressed)
 window.bind("<a>",onAPressed)
+window.bind("<space>",onSpacePressed)
 
 #DISPLAY WINDOW====================================================
 canvas.pack(expand=True,fill="both")
