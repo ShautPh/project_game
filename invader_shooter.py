@@ -77,7 +77,6 @@ def in_processing():
     canvas.after(500,move_enemies)
     player_pos = canvas.create_image(300, 400, image=player)  
     bullet_of_player = canvas.create_image(BulletPlayerStartX, BulletPlayerStartY, image=bullet_player, tags="player_bullet")
-  
 # # ----------------------------------------------
 # # CONSTANTS
 # # ----------------------------------------------
