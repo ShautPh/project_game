@@ -202,6 +202,7 @@ def move_player_bullet():
     bulletToRemove = []
     for bullet in listOfPlayerBullet:
         canvas.move(bullet, 30, 0)
+        winsound.PlaySound("sound/shoot.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
         pos_bullet = canvas.coords(bullet)
         if pos_bullet[0] > 1100:
             bulletToRemove.append(bullet)
@@ -210,10 +211,16 @@ def move_player_bullet():
         canvas.delete(bullet)
     canvas.after(100,move_player_bullet)
 
-
-#
+def displayFire():
+    positionOfEn = canvas.coords(enemy)
+    winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    canvas.create_image(positionOfEn[0],positionOfEn[1],image=fire_ennemy,tags="deleteFire")
+    canvas.after(300,disappearFire)
+def disappearFire():
+    canvas.delete("deleteFire")
 # TO CHECK IF PLAYER BULLET MEET ENNEMY========================================
 def playerBulletMeetEnnemy(listOfPlayerBullets, listOfEnemies):
+    global enemy
     toBeDeleted = []
     for playerBullet in listOfPlayerBullets:
         positionOfBulletPlayer = canvas.coords(playerBullet)
@@ -222,8 +229,11 @@ def playerBulletMeetEnnemy(listOfPlayerBullets, listOfEnemies):
             if (positionOfBulletPlayer[1]+25 >= positionOfEn[1]) and (positionOfBulletPlayer[1]+25 <= positionOfEn[1]+55) and (positionOfBulletPlayer[0]+25 >= positionOfEn[0]) and (positionOfBulletPlayer[0]+25 <= positionOfEn[0]+55):
                 toBeDeleted.append(playerBullet)
                 toBeDeleted.append(enemy)
+                displayFire()
                 # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     return toBeDeleted
+
+
 
 def bulletMeetEn():
     meetEnemy = playerBulletMeetEnnemy(listOfPlayerBullet, listOfEnemies)
