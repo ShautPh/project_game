@@ -7,6 +7,7 @@ from tkinter import font
 from tkinter.constants import ANCHOR, COMMAND, NW, SE, TRUE, W
 from tkinter.font import BOLD 
 import winsound
+import os
 
 
 # ----------------------------------------------
@@ -27,6 +28,7 @@ bg = tk.PhotoImage(file="./img/start-game.png")
 bg_game = tk.PhotoImage(file="./img/battle-game.png")
 loading_background =  tk.PhotoImage(file="./img/loading_bg.png")
 game_over =  tk.PhotoImage(file="./img/game-over.png")
+pause_button = tk.PhotoImage(file="./img/pause-icon.png")
 # # PLAYER IMAGE........................
 player = tk.PhotoImage(file="./img/player.png")  #SIZE OF PLAYER (174x122)
 
@@ -122,7 +124,6 @@ BulletPlayerStartY = 400
 posOfEachEnnemy = []
 shooted = False
 game_lost = False
-game_pause = False
 listOfEnemies = []
 listOfPlayerBullet = []
 listOfEnnemyBullet = []
