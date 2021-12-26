@@ -27,15 +27,15 @@ bg = tk.PhotoImage(file="./img/start-game.png")
 bg_game = tk.PhotoImage(file="./img/battle-game.png")
 loading_background =  tk.PhotoImage(file="./img/loading_bg.png")
 # # PLAYER IMAGE........................
-player = tk.PhotoImage(file="./img/player.png")
+player = tk.PhotoImage(file="./img/player.png")  #SIZE OF PLAYER ()
 
 # WINDOW SHOW WHEN PLAYER WIN
 player_win = tk.PhotoImage(file="./img/win-game.png")
 # PLAYER BULLET
-bullet_player = tk.PhotoImage(file="./img/bullet_player.png")
+bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BULLET ()
 
 # ENNEMY IMAGES.....................
-black_ennemy_image = tk.PhotoImage(file="./img/black-animy.png")
+black_ennemy_image = tk.PhotoImage(file="./img/black-animy.png") #SIZE OF ENNEMY ()
 blue_ennemy_image = tk.PhotoImage(file="./img/blue-animy.png")
 red_ennemy_image = tk.PhotoImage(file="./img/red-animy.png")
 main_ennemy_image = tk.PhotoImage(file="./img/main-animy.png")
@@ -80,8 +80,9 @@ def in_processing():
     # CALL THE FUNCTION TO PROGRESS=========================================
     x = 86
     for i in range(5):
-        canvas.create_rectangle(x,22,x+40,50,fill="red",outline="",tags="blood")
+        live = canvas.create_rectangle(x,22,x+40,50,fill="red",outline="",tags="blood")
         x += 46
+        listOfPlayerLives.append(live)
     player_socre = canvas.create_text(160,100,text="SCORE: 0",font=("Purisa", 16, BOLD), fill="white",tags=("startTheGame","start"))
     player_pos = canvas.create_image(300, 400, image=player)  
     canvas.after(500,create_enemy)
@@ -110,7 +111,8 @@ shooted = False
 listOfEnemies = []
 listOfPlayerBullet = []
 listOfEnnemyBullet = []
-
+listOfPlayerLives = []
+minusPlayerLives = 0
 # # THE POSITION OF THE PLAYER================================================
 def getPlayerPosition():
     return canvas.coords(player_pos)
@@ -208,39 +210,59 @@ def move_player_bullet():
         pos_bullet = canvas.coords(bullet)
         if pos_bullet[0] > 1100:
             bulletToRemove.append(bullet)
-        if pos_bullet[0] == posOfEachEnnemy[0]:
-            player_bullet_touch_ennemy()
     for bullet in bulletToRemove:
         listOfPlayerBullet.remove(bullet)
         canvas.delete(bullet)
     canvas.after(100,move_player_bullet)
 
-def player_bullet_touch_ennemy():
-    global SCORE,player_score
-    SCORE += 1
-    if SCORE <= 1: 
-        canvas.itemconfig(player_socre,text= "SCORE: "+ str(SCORE))
-    else:
-        canvas.itemconfig(player_socre,text= "SCORES: "+ str(SCORE))
+# def player_bullet_touch_ennemy():
+#     global SCORE,player_score
+#     SCORE += 1
+#     if SCORE <= 1: 
+#         canvas.itemconfig(player_socre,text= "SCORE: "+ str(SCORE))
+#     else:
+#         canvas.itemconfig(player_socre,text= "SCORES: "+ str(SCORE))
+#
+# TO CHECK IF PLAYER BULLET MEET ENNEMY========================================
+def player_bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies):
+    ennemyToBeDeleted = []
+    for playerBullet in listOfPlayerBullet: 
+        posPlayerBullet = canvas.coords(playerBullet)
+        for enemy in listOfEnemies: 
+            posEnnemy = canvas.coords(enemy)
+            if 
+                ennemyToBeDeleted.append(playerBullet)
+                ennemyToBeDeleted.append(enemy)
+    return ennemyToBeDeleted
 
-def main_ennemy():
-    global last_main_ennemy
-    last_main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
-    move_main_ennemy()
+# TO CHECK IF PLAYER MEET ENNEMY========================================
+def player_meet_bullet(ennemies,player):
+    ennemyToBeDeleted = None
+    posOfPlayer = canvas.coords(player)
+    for ennemy in ennemies: 
+        posOfEnnemy = canvas.coords(ennemy)
+        if
+            ennemyToBeDeleted = enemy
+    return ennemyToBeDeleted
 
-def move_main_ennemy():
-    canvas.move(last_main_ennemy,-50,0)
-    canvas.after(3000,move_main_ennemy_go_right)
-def move_main_ennemy_go_right():
-    canvas.move(last_main_ennemy,50,0)
-    canvas.after(3000,move_main_ennemy_go_Down)
-def move_main_ennemy_go_Down():
-    canvas.move(last_main_ennemy,0,40)
-    canvas.after(3000,move_main_ennemy_go_up)
-def move_main_ennemy_go_up():
-    canvas.move(last_main_ennemy,0,-40)
-    canvas.after(3000,move_main_ennemy)
-    canvas.after(100,move_main_ennemy)
+# def main_ennemy():
+#     global last_main_ennemy
+#     last_main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
+#     move_main_ennemy()
+
+# def move_main_ennemy():
+#     canvas.move(last_main_ennemy,-50,0)
+#     canvas.after(3000,move_main_ennemy_go_right)
+# def move_main_ennemy_go_right():
+#     canvas.move(last_main_ennemy,50,0)
+#     canvas.after(3000,move_main_ennemy_go_Down)
+# def move_main_ennemy_go_Down():
+#     canvas.move(last_main_ennemy,0,40)
+#     canvas.after(3000,move_main_ennemy_go_up)
+# def move_main_ennemy_go_up():
+#     canvas.move(last_main_ennemy,0,-40)
+#     canvas.after(3000,move_main_ennemy)
+#     canvas.after(100,move_main_ennemy)
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
