@@ -27,12 +27,12 @@ bg = tk.PhotoImage(file="./img/start-game.png")
 bg_game = tk.PhotoImage(file="./img/battle-game.png")
 loading_background =  tk.PhotoImage(file="./img/loading_bg.png")
 # # PLAYER IMAGE........................
-player = tk.PhotoImage(file="./img/player.png")  #SIZE OF PLAYER ()
+player = tk.PhotoImage(file="./img/player.png")  #SIZE OF PLAYER (174x122)
 
 # WINDOW SHOW WHEN PLAYER WIN
 player_win = tk.PhotoImage(file="./img/win-game.png")
 # PLAYER BULLET
-bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BULLET ()
+bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BULLET (59x59)
 
 # ENNEMY IMAGES.....................
 black_ennemy_image = tk.PhotoImage(file="./img/black-animy.png") #SIZE OF ENNEMY ()
@@ -230,7 +230,7 @@ def player_bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies):
         posPlayerBullet = canvas.coords(playerBullet)
         for enemy in listOfEnemies: 
             posEnnemy = canvas.coords(enemy)
-            if 
+            if (posPlayerBullet[0] >= posEnnemy[0]) and (posPlayerBullet[0] >= posEnnemy[0])
                 ennemyToBeDeleted.append(playerBullet)
                 ennemyToBeDeleted.append(enemy)
     return ennemyToBeDeleted
