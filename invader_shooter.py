@@ -33,6 +33,8 @@ player = tk.PhotoImage(file="./img/player.png")  #SIZE OF PLAYER ()
 player_win = tk.PhotoImage(file="./img/win-game.png")
 # PLAYER BULLET
 bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BULLET ()
+# PLAYER BULLET
+bullet_ennemy = tk.PhotoImage(file="./img/bullet_ennemy.png") #SIZE OF PLAYER BULLET (45x45)
 
 # ENNEMY IMAGES.....................
 black_ennemy_image = tk.PhotoImage(file="./img/black-animy.png") #SIZE OF ENNEMY ()
@@ -158,7 +160,7 @@ def create_enemy():
         ennemyImage = random.choice(ENNEMY_IMAGES)
         newEnemy = canvas.create_image(newEnnemyStartX,newEnnemyStartY,image=ennemyImage, tags="all_enemy")
         listOfEnemies.append(newEnemy)
-        bullet_of_ennemy = canvas.create_image(newEnnemyStartX, newEnnemyStartY, image=bullet_player, tags="player_bullet")
+        bullet_of_ennemy = canvas.create_image(newEnnemyStartX, newEnnemyStartY, image=bullet_ennemy, tags="player_bullet")
         listOfEnnemyBullet.append(bullet_of_ennemy)
     newEnnemyStartY = 30
     canvas.after(1000, create_enemy)
@@ -230,18 +232,18 @@ def player_bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies):
         posPlayerBullet = canvas.coords(playerBullet)
         for enemy in listOfEnemies: 
             posEnnemy = canvas.coords(enemy)
-            if 
+            if posPlayerBullet[0] == posEnnemy[0]+100:
                 ennemyToBeDeleted.append(playerBullet)
                 ennemyToBeDeleted.append(enemy)
     return ennemyToBeDeleted
 
 # TO CHECK IF PLAYER MEET ENNEMY========================================
 def player_meet_bullet(ennemies,player):
-    ennemyToBeDeleted = None
+    ennemyToBeDeleted = []
     posOfPlayer = canvas.coords(player)
     for ennemy in ennemies: 
         posOfEnnemy = canvas.coords(ennemy)
-        if
+        if posOfPlayer[0] == posOfEnnemy[0]:
             ennemyToBeDeleted = enemy
     return ennemyToBeDeleted
 
