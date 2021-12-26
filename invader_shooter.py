@@ -52,13 +52,12 @@ def global_start_game():
         canvas.create_image(0,0,anchor=NW, image = bg,tags="start")
         canvas.create_text(454,320,text="START",font=("Purisa", 30, BOLD), fill="white",tags=("startTheGame","start"))
         canvas.create_text(744,320,text="EXIT",font=("Purisa", 30, BOLD), fill="white",tags=("exitTheGame","start"))
-    # if display_game and shooted: 
-    #     loading_the_process()
 global_start_game()
 
 #EXIT THE WINDOW TO STOP THE PROGRAME-----------------------------
 def close_the_window(event):
     window.destroy()
+
 #START GAME============
 def start_process(event):
     global display_game
@@ -66,6 +65,7 @@ def start_process(event):
     display_game = True
     if display_game: 
         loading_the_process()
+
 #LOADING TIME BEFORE ALLOW PLAYER TO PLAY GAME===============================
 def loading_the_process():
     canvas.create_image(0,0,image= loading_background, anchor = NW)
@@ -77,7 +77,6 @@ def loading_the_process():
 def in_processing():
     global player_pos,bullet_of_player,player_socre,battle_image
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
-    minusPlayerLives = 0
     # CALL THE FUNCTION TO PROGRESS=========================================
     x = 86
     for i in range(5):
