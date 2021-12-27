@@ -92,6 +92,9 @@ def in_processing():
     canvas.after(500, create_player_bullet)
     canvas.after(500, move_player_bullet)
     canvas.after(500, move_ennemy_bullet)
+    print(listOfEnemies)
+    print(listOfPlayerBullet)
+    print(bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies))
 
 # # ----------------------------------------------
 # # CONSTANTS
@@ -216,34 +219,50 @@ def move_player_bullet():
         listOfPlayerBullet.remove(bullet)
         canvas.delete(bullet)
     canvas.after(100,move_player_bullet)
-
-# def player_bullet_touch_ennemy():
-#     global SCORE,player_score
-#     SCORE += 1
-#     if SCORE <= 1: 
-#         canvas.itemconfig(player_socre,text= "SCORE: "+ str(SCORE))
-#     else:
+# When Bullet Touch Ennemy
+# def player_bullet_touch_en():
+#     global SCORE
+#     touch_en = bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies)
+#     if len(touch_en) > 0:
+#         listOfPlayerBullet.remove(touch_en[0])
+#         listOfEnemies.remove(touch_en[1])
+#         canvas.delete(touch_en[0])
+#         canvas.delete(touch_en[1])
+#         SCORE += 1
 #         canvas.itemconfig(player_socre,text= "SCORES: "+ str(SCORE))
-#
+
 # TO CHECK IF PLAYER BULLET MEET ENNEMY========================================
-def player_bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies):
+def bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies):
     ennemyToBeDeleted = []
     for playerBullet in listOfPlayerBullet: 
         posPlayerBullet = canvas.coords(playerBullet)
         for enemy in listOfEnemies: 
             posEnnemy = canvas.coords(enemy)
-            if posPlayerBullet[0] == posEnnemy[0]+100:
+            # if (posPlayerBullet[1] <= posEnnemy[1]+95) and (((posEnnemy[0] >= posPlayerBullet[0]) and (posEnnemy[0] <= posPlayerBullet[0]+59)) or ((posEnnemy[0]+95 >= posPlayerBullet[0]) and (posEnnemy[0]+95 <= posPlayerBullet[0]+59))):
+            if posPlayerBullet[0] >= posEnnemy[0]+95:
                 ennemyToBeDeleted.append(playerBullet)
                 ennemyToBeDeleted.append(enemy)
     return ennemyToBeDeleted
 
+# def bullet_touch_en():
+#     global SCORE, player_socre
+#     touch_en = bullet_touch_ennemy(listOfPlayerBullet, listOfEnemies)
+#     if len(touch_en) > 0:
+#         print("player_bullet_touch_en()")
+#         listOfPlayerBullet.remove(touch_en[0])
+#         listOfEnemies.remove(touch_en[1])
+#         canvas.delete(touch_en[0])
+#         canvas.delete(touch_en[1])
+#         SCORE += 1
+#         canvas.itemconfig(player_socre,text= "SCORES: "+ str(SCORE))
+        
 # TO CHECK IF PLAYER MEET ENNEMY========================================
 def player_meet_bullet(ennemies,player):
     ennemyToBeDeleted = []
     posOfPlayer = canvas.coords(player)
     for ennemy in ennemies: 
         posOfEnnemy = canvas.coords(ennemy)
-        if posOfPlayer[0] == posOfEnnemy[0]:
+        if posOfPlayer[1] == posOfEnnemy[0]:
             ennemyToBeDeleted = enemy
     return ennemyToBeDeleted
 
@@ -265,6 +284,7 @@ def player_meet_bullet(ennemies,player):
 #     canvas.move(last_main_ennemy,0,-40)
 #     canvas.after(3000,move_main_ennemy)
 #     canvas.after(100,move_main_ennemy)
+
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
