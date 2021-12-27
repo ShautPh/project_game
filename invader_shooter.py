@@ -168,7 +168,7 @@ def goRight():
 
 # CREATE THE ENNEMIES AND THEIR BULLET TO DISPLAY ON SCREEN ===================
 def create_enemy():
-    global newEnnemyStartY,minusPlayerLives
+    global newEnnemyStartY
     numberEnnemyOnce = random.randrange(6,12)
     if len(listOfEnemies) < numberEnnemyOnce and minusPlayerLives > -5:
         newEnnemyStartY =random.randrange(20,500)
@@ -182,7 +182,6 @@ def create_enemy():
 
 # MOVE POSITION OF THE ENNEMIES TO ANYWHERE===========================
 def move_enemies():
-    global minusPlayerLives
     ennemiesToBeDeleted = []
     if minusPlayerLives > -5:
         for enemy in listOfEnemies:
@@ -205,32 +204,34 @@ def create_player_bullet():
 # MOVE BULLET OF ENNEMIES TO THE PLAYER   ==============================
 def move_ennemy_bullet():
     bulletEnnemyToRemove = []
-    for bullet_ennemy in listOfEnnemyBullet:
-        canvas.move(bullet_ennemy, -30, 0)
-        pos_bullet = canvas.coords(bullet_ennemy)
-        if pos_bullet[0] < 100:
-            bulletEnnemyToRemove.append(bullet_ennemy)
-    
-    for bullet_ennemy in bulletEnnemyToRemove:
-        listOfEnnemyBullet.remove(bullet_ennemy)
-        canvas.delete(bullet_ennemy)
-    ennemyBulletMeetPlayer(listOfEnnemyBullet)
-    canvas.after(100,move_ennemy_bullet)
+    if minusPlayerLives > -5:
+        for bullet_ennemy in listOfEnnemyBullet:
+            canvas.move(bullet_ennemy, -30, 0)
+            pos_bullet = canvas.coords(bullet_ennemy)
+            if pos_bullet[0] < 100:
+                bulletEnnemyToRemove.append(bullet_ennemy)
+        
+        for bullet_ennemy in bulletEnnemyToRemove:
+            listOfEnnemyBullet.remove(bullet_ennemy)
+            canvas.delete(bullet_ennemy)
+        ennemyBulletMeetPlayer(listOfEnnemyBullet)
+        canvas.after(100,move_ennemy_bullet)
 
 # MOVE BULLET OF PLAYER TO THE ENNEMIES ==============================
 def move_player_bullet():
     bulletToRemove = []
-    for bullet in listOfPlayerBullet:
-        canvas.move(bullet, 30, 0)
-        winsound.PlaySound("sound/shoot.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
-        pos_bullet = canvas.coords(bullet)
-        if pos_bullet[0] > 1100:
-            bulletToRemove.append(bullet)
-    for bullet in bulletToRemove:
-        listOfPlayerBullet.remove(bullet)
-        canvas.delete(bullet)
-    bulletMeetEnnemy()
-    canvas.after(100,move_player_bullet)
+    if minusPlayerLives > -5:
+        for bullet in listOfPlayerBullet:
+            canvas.move(bullet, 30, 0)
+            winsound.PlaySound("sound/shoot.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+            pos_bullet = canvas.coords(bullet)
+            if pos_bullet[0] > 1100:
+                bulletToRemove.append(bullet)
+        for bullet in bulletToRemove:
+            listOfPlayerBullet.remove(bullet)
+            canvas.delete(bullet)
+        bulletMeetEnnemy()
+        canvas.after(100,move_player_bullet)
 
 def displayFire():
     positionOfEn = canvas.coords(enemy)
