@@ -179,3 +179,35 @@ window.bind("<space>",onSpacePressed)
 canvas.pack(expand=True,fill="both")
 frame.pack(expand=True,fill="both")
 window.mainloop()
+
+
+
+
+# def increment_player_score():
+#     global SCORE,player_score
+#     SCORE += 1
+#     if SCORE <= 1: 
+#         canvas.itemconfig(player_socre,text= "SCORE: "+ str(SCORE))
+#     else:
+#         canvas.itemconfig(player_socre,text= "SCORES: "+ str(SCORE))
+#
+
+
+# def appear_main_ennemy():
+#     global main_ennemy
+#     main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
+#     move_main_ennemy()
+
+# def move_main_ennemy():
+#     canvas.move(main_ennemy,-50,0)
+#     canvas.after(3000,move_main_ennemy_go_right)
+# def move_main_ennemy_go_right():
+#     canvas.move(main_ennemy,50,0)
+#     canvas.after(3000,move_main_ennemy_go_Down)
+# def move_main_ennemy_go_Down():
+#     canvas.move(main_ennemy,0,40)
+#     canvas.after(3000,move_main_ennemy_go_up)
+# def move_main_ennemy_go_up():
+#     canvas.move(main_ennemy,0,-40)
+#     canvas.after(3000,move_main_ennemy)
+#     canvas.after(100,move_main_ennemy)
