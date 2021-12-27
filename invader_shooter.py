@@ -35,7 +35,8 @@ player_win = tk.PhotoImage(file="./img/win-game.png")
 bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BULLET ()
 # PLAYER BULLET
 bullet_ennemy = tk.PhotoImage(file="./img/bullet_ennemy.png") #SIZE OF PLAYER BULLET (45x45)
-
+# FIRE
+fire_ennemy = tk.PhotoImage(file="./img/fire.png")
 # ENNEMY IMAGES.....................
 black_ennemy_image = tk.PhotoImage(file="./img/black-animy.png") #SIZE OF ENNEMY ()
 blue_ennemy_image = tk.PhotoImage(file="./img/blue-animy.png")
@@ -159,7 +160,7 @@ def create_enemy():
         ennemyImage = random.choice(ENNEMY_IMAGES)
         newEnemy = canvas.create_image(newEnnemyStartX,newEnnemyStartY,image=ennemyImage)
         listOfEnemies.append(newEnemy)
-        bullet_of_ennemy = canvas.create_image(newEnnemyStartX, newEnnemyStartY, image=bullet_ennemy, tags="player_bullet")
+        bullet_of_ennemy = canvas.create_image(newEnnemyStartX, newEnnemyStartY, image=bullet_ennemy)
         listOfEnnemyBullet.append(bullet_of_ennemy)
     newEnnemyStartY = 30
     canvas.after(1000, create_enemy)
@@ -244,16 +245,22 @@ def move_player_bullet():
 #         canvas.delete(meetEnemy[0])
 #         SCORE += 1
 #         canvas.itemconfig(player_socre, text=("Score: " + str(SCORE)))
+# DISPLAY FIRE&SOUND WHEN BULLET MEET ENNEMY
+def displayFire():
+    positionOfEn = canvas.coords(enemy)
+    canvas.create_image(positionOfEn[0], positionOfEn[1], image=fire_ennemy)
+
 def isMeetEnemy(listOfPlayerBullets, listOfEnemies):
+    global enemy
     toDelete = []
     for playerBullet in listOfPlayerBullets:
         positionOfBulletPlayer = canvas.coords(playerBullet)
-
         for enemy in listOfEnemies:
             positionOfEn = canvas.coords(enemy)
             if (positionOfBulletPlayer[1]+15 >= positionOfEn[1]) and (positionOfBulletPlayer[1]+15 <= positionOfEn[1]+55) and (positionOfBulletPlayer[0]+15 >= positionOfEn[0]) and (positionOfBulletPlayer[0]+15 <= positionOfEn[0]+55):
                 toDelete.append(playerBullet)
                 toDelete.append(enemy)
+                displayFire()
     return toDelete
 
 def bulletMeetEn():
@@ -266,6 +273,7 @@ def bulletMeetEn():
         canvas.delete(meetEnemy[1])
         SCORE += 1
         canvas.itemconfig(player_socre, text=("Score: " + str(SCORE)))
+
 
 # TO CHECK IF PLAYER MEET ENNEMY========================================
 # def player_meet_bullet(ennemies,player):
