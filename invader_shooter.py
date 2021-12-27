@@ -122,6 +122,7 @@ BulletPlayerStartY = 400
 posOfEachEnnemy = []
 shooted = False
 game_lost = False
+game_pause = False
 listOfEnemies = []
 listOfPlayerBullet = []
 listOfEnnemyBullet = []
