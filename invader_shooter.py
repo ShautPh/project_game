@@ -4,7 +4,7 @@ import tkinter as tk
 import random
 import time
 from tkinter import font
-from tkinter.constants import ANCHOR, COMMAND, NW, SE, W
+from tkinter.constants import ANCHOR, COMMAND, NW, SE, TRUE, W
 from tkinter.font import BOLD 
 import winsound
 
@@ -26,6 +26,7 @@ canvas = tk.Canvas(frame)
 bg = tk.PhotoImage(file="./img/start-game.png")
 bg_game = tk.PhotoImage(file="./img/battle-game.png")
 loading_background =  tk.PhotoImage(file="./img/loading_bg.png")
+game_over =  tk.PhotoImage(file="./img/game-over.png")
 # # PLAYER IMAGE........................
 player = tk.PhotoImage(file="./img/player.png")  #SIZE OF PLAYER (174x122)
 
@@ -37,6 +38,7 @@ bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BU
 bullet_ennemy = tk.PhotoImage(file="./img/bullet_ennemy.png") #SIZE OF PLAYER BULLET (45x45)
 # FIRE
 fire_ennemy = tk.PhotoImage(file="./img/fire.png")
+fire_player = tk.PhotoImage(file="./img/fire_player.png")
 # ENNEMY IMAGES.....................
 black_ennemy_image = tk.PhotoImage(file="./img/black-animy.png") #SIZE OF ENNEMY (95x95)
 blue_ennemy_image = tk.PhotoImage(file="./img/blue-animy.png")
@@ -78,7 +80,8 @@ def loading_the_process():
 
 #GAME IN PROCESSING-------------------------------------------
 def in_processing():
-    global player_pos,bullet_of_player,player_socre,battle_image
+    global player_pos,bullet_of_player,player_socre,battle_image, minusPlayerLives
+    minusPlayerLives = 0
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
     # CALL THE FUNCTION TO PROGRESS=========================================
     x = 86
@@ -93,12 +96,20 @@ def in_processing():
     canvas.after(500, create_player_bullet)
     canvas.after(500, move_player_bullet)
     canvas.after(500, move_ennemy_bullet)
+
+def displayLost():
+    canvas.create_image(1200, 650, anchor=SE, image=game_over)
+    canvas.create_text(452,467,text="AGAIN",font=("Purisa", 30, BOLD), fill="white",tags=("startTheGame","start"))
+    canvas.create_text(744,467,text="EXIT",font=("Purisa", 30, BOLD), fill="white",tags=("exitTheGame","start"))
+
 # # ----------------------------------------------
 # # CONSTANTS
 # # ----------------------------------------------
 MOVE_PLAYER_INCREMENT = 20
 ENNEMY_IMAGES = [black_ennemy_image,blue_ennemy_image,red_ennemy_image]
 SCORE = 0 
+BULLET_SIZE = 59
+ENNEMY_SIZE = 95
 # # ----------------------------------------------
 # # VARIABLES
 # # ----------------------------------------------
@@ -110,11 +121,13 @@ BulletPlayerStartX = 380
 BulletPlayerStartY = 400
 posOfEachEnnemy = []
 shooted = False
+game_lost = False
 listOfEnemies = []
 listOfPlayerBullet = []
 listOfEnnemyBullet = []
 listOfPlayerLives = []
 minusPlayerLives = 0
+
 # # THE POSITION OF THE PLAYER================================================
 def getPlayerPosition():
     return canvas.coords(player_pos)
@@ -152,9 +165,9 @@ def goRight():
 
 # CREATE THE ENNEMIES AND THEIR BULLET TO DISPLAY ON SCREEN ===================
 def create_enemy():
-    global newEnnemyStartY
+    global newEnnemyStartY,minusPlayerLives
     numberEnnemyOnce = random.randrange(6,12)
-    if len(listOfEnemies) < numberEnnemyOnce:
+    if len(listOfEnemies) < numberEnnemyOnce and minusPlayerLives > -5:
         newEnnemyStartY =random.randrange(20,500)
         ennemyImage = random.choice(ENNEMY_IMAGES)
         newEnemy = canvas.create_image(newEnnemyStartX,newEnnemyStartY,image=ennemyImage)
@@ -180,9 +193,10 @@ def move_enemies():
 
 # CREATE THE BULLET OF THE PLAYER TO DISPLAY ON SCREEN ===================
 def create_player_bullet():
-    bullet_of_player = canvas.create_image(getPlayerPosition()[0] + 80, getPlayerPosition()[1], image=bullet_player, tags="player_bullet")
-    listOfPlayerBullet.append(bullet_of_player)
-    canvas.after(500, create_player_bullet)
+    if minusPlayerLives > -5:
+        bullet_of_player = canvas.create_image(getPlayerPosition()[0] + 80, getPlayerPosition()[1], image=bullet_player, tags="player_bullet")
+        listOfPlayerBullet.append(bullet_of_player)
+        canvas.after(500, create_player_bullet)
 # MOVE BULLET OF ENNEMIES TO THE PLAYER   ==============================
 def move_ennemy_bullet():
     bulletEnnemyToRemove = []
@@ -218,6 +232,11 @@ def displayFire():
     winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(positionOfEn[0],positionOfEn[1],image=fire_ennemy,tags="deleteFire")
     canvas.after(300,disappearFire)
+
+def displayFirePlayer():
+    winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    canvas.create_image(getPlayerPosition()[0]+80,getPlayerPosition()[1],image=fire_player,tags="deleteFire")
+    canvas.after(300,disappearFire)
 def disappearFire():
     canvas.delete("deleteFire")
 # TO CHECK IF PLAYER BULLET MEET ENNEMY========================================
@@ -228,7 +247,7 @@ def playerBulletMeetEnnemy(listOfPlayerBullets, listOfEnemies):
         positionOfBulletPlayer = canvas.coords(playerBullet)
         for enemy in listOfEnemies:
             positionOfEn = canvas.coords(enemy)
-            if (positionOfBulletPlayer[1]+25 >= positionOfEn[1]) and (positionOfBulletPlayer[1]+25 <= positionOfEn[1]+55) and (positionOfBulletPlayer[0]+25 >= positionOfEn[0]) and (positionOfBulletPlayer[0]+25 <= positionOfEn[0]+55):
+            if (positionOfBulletPlayer[1]+59 >= positionOfEn[1]) and (positionOfBulletPlayer[1]+59 <= positionOfEn[1]+95) and (positionOfBulletPlayer[0]+59 >= positionOfEn[0]) and (positionOfBulletPlayer[0]+59 <= positionOfEn[0]+95):
                 toBeDeleted.append(playerBullet)
                 toBeDeleted.append(enemy)
                 displayFire()
@@ -242,6 +261,7 @@ def ennemyBulletMeetPlayer(listOfEnnemyBullet):
         positionOfBulletEnnemy = canvas.coords(ennemyBullet)
         if (getPlayerPosition()[1]+45 >=positionOfBulletEnnemy[1]) and (getPlayerPosition()[1]+45 <= positionOfBulletEnnemy[1]+85) and (getPlayerPosition()[0]+45 >= positionOfBulletEnnemy[0]) and (getPlayerPosition()[0]+45 <= positionOfBulletEnnemy[0]+85):
             toBeDeleted.append(ennemyBullet)
+            displayFirePlayer()
             bulletMeetPlayer()
             deleteEnnemyBullet()
             
@@ -255,9 +275,9 @@ def ennemyMeetPlayer(listOfEnemies):
         positionOfEnnemy = canvas.coords(ennemy)
         if (getPlayerPosition()[1]+45 >=positionOfEnnemy[1]) and (getPlayerPosition()[1]+45 <= positionOfEnnemy[1]+85) and (getPlayerPosition()[0]+45 >= positionOfEnnemy[0]) and (getPlayerPosition()[0]+45 <= positionOfEnnemy[0]+85):
             toBeDeleted.append(ennemy)
+            displayFirePlayer()
             bulletMeetPlayer()
             deleteEnnemy()
-            displayFire()
             
                 # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     return toBeDeleted
@@ -272,11 +292,14 @@ def bulletMeetEnnemy():
         scoreIncrement()
 
 def bulletMeetPlayer():
-    global minusPlayerLives
-    minusPlayerLives -= 1
-    canvas.itemconfig(listOfPlayerLives[minusPlayerLives], fill="")
-    # if minusPlayerLives == -5:
-    #     window.destroy()
+    global minusPlayerLives, game_lost 
+    if minusPlayerLives != -5:
+        minusPlayerLives -= 1
+        canvas.itemconfig(listOfPlayerLives[minusPlayerLives], fill="")
+    else:
+        displayLost()
+
+
 
 def deleteEnnemyBullet():
     listOfEnnemyBullet.remove(ennemyBullet)
@@ -285,7 +308,6 @@ def deleteEnnemyBullet():
 def deleteEnnemy():
     listOfEnemies.remove(ennemy)
     canvas.delete(ennemy)
-
 def scoreIncrement():
     global SCORE
     SCORE += 1
@@ -314,6 +336,8 @@ def scoreIncrement():
 #     canvas.move(main_ennemy,0,-40)
 #     canvas.after(3000,move_main_ennemy)
 #     canvas.after(100,move_main_ennemy)
+
+
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
