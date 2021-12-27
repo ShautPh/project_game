@@ -48,7 +48,7 @@ red_ennemy_image = tk.PhotoImage(file="./img/red-animy.png")
 main_ennemy_image = tk.PhotoImage(file="./img/main-animy.png")
 
 display_game = False
-def display_start_game():
+def global_start_game():
     global display_game,SCORE
     if not display_game: 
         canvas.create_image(0,0,anchor=NW, image = bg,tags="start")
@@ -56,11 +56,9 @@ def display_start_game():
         canvas.create_text(454,320,text="START",font=("Purisa", 30, BOLD), fill="white",tags=("startTheGame","start"))
         canvas.create_rectangle(660,290,816,350,fill="red",outline="",tags="start")
         canvas.create_text(744,320,text="EXIT",font=("Purisa", 30, BOLD), fill="white",tags=("exitTheGame","start"))
-    # elif display_game and SCORE == 2: 
-    #     canvas.create_image(1000,650,image=player_win ,anchor=SE)
-    #     # window.destroy()
-    # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ALIAS)
-display_start_game()
+    # if display_game and shooted: 
+    #     loading_the_process()
+global_start_game()
 
 #EXIT THE WINDOW TO STOP THE PROGRAME-----------------------------
 def close_the_window(event):
@@ -71,7 +69,7 @@ def start_process(event):
     canvas.delete("start")
     display_game = True
     if display_game: 
-        canvas.after(100,loading_the_process)
+        loading_the_process()
 #LOADING TIME BEFORE ALLOW PLAYER TO PLAY GAME===============================
 def loading_the_process():
     canvas.create_image(0,0,image= loading_background, anchor = NW)
@@ -85,6 +83,7 @@ def in_processing():
     global player_pos,bullet_of_player,player_socre,battle_image, minusPlayerLives
     minusPlayerLives = 0
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
+    minusPlayerLives = 0
     # CALL THE FUNCTION TO PROGRESS=========================================
     x = 86
     for i in range(5):
@@ -103,7 +102,6 @@ def displayLost():
     canvas.create_image(1200, 650, anchor=SE, image=game_over)
     canvas.create_text(452,467,text="AGAIN",font=("Purisa", 30, BOLD), fill="white",tags=("startTheGame","start"))
     canvas.create_text(744,467,text="EXIT",font=("Purisa", 30, BOLD), fill="white",tags=("exitTheGame","start"))
-
 # # ----------------------------------------------
 # # CONSTANTS
 # # ----------------------------------------------
@@ -129,6 +127,8 @@ listOfPlayerBullet = []
 listOfEnnemyBullet = []
 listOfPlayerLives = []
 minusPlayerLives = 0
+game_lost = False
+game_pause = False
 
 # # THE POSITION OF THE PLAYER================================================
 def getPlayerPosition():
@@ -229,18 +229,20 @@ def move_player_bullet():
     bulletMeetEnnemy()
     canvas.after(100,move_player_bullet)
 
+# FIRE APPEAR AFTER TOUCH SOMETHING=========================
 def displayFire():
     positionOfEn = canvas.coords(enemy)
     winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(positionOfEn[0],positionOfEn[1],image=fire_ennemy,tags="deleteFire")
     canvas.after(300,disappearFire)
-
 def displayFirePlayer():
     winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(getPlayerPosition()[0]+80,getPlayerPosition()[1],image=fire_player,tags="deleteFire")
     canvas.after(300,disappearFire)
 def disappearFire():
     canvas.delete("deleteFire")
+#==========================================================
+
 # TO CHECK IF PLAYER BULLET MEET ENNEMY========================================
 def playerBulletMeetEnnemy(listOfPlayerBullets, listOfEnemies):
     global enemy
@@ -252,9 +254,10 @@ def playerBulletMeetEnnemy(listOfPlayerBullets, listOfEnemies):
             if (positionOfBulletPlayer[1]+59 >= positionOfEn[1]) and (positionOfBulletPlayer[1]+59 <= positionOfEn[1]+95) and (positionOfBulletPlayer[0]+59 >= positionOfEn[0]) and (positionOfBulletPlayer[0]+59 <= positionOfEn[0]+95):
                 toBeDeleted.append(playerBullet)
                 toBeDeleted.append(enemy)
-                displayFire()
                 # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+                displayFire()
     return toBeDeleted
+
 # TO CHECK IF ENNEMY BULLET MEET PLAYER========================================
 def ennemyBulletMeetPlayer(listOfEnnemyBullet):
     global ennemyBullet
@@ -270,6 +273,7 @@ def ennemyBulletMeetPlayer(listOfEnnemyBullet):
                 # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     return toBeDeleted
 
+#CHECK ENNEMY WHEN IT TOUCH THE PLAYER===================
 def ennemyMeetPlayer(listOfEnemies):
     global ennemy
     toBeDeleted = []
@@ -279,11 +283,13 @@ def ennemyMeetPlayer(listOfEnemies):
             toBeDeleted.append(ennemy)
             displayFirePlayer()
             bulletMeetPlayer()
-            deleteEnnemy()
+            displayFirePlayer()
+            deleteEnnemy(ennemy)
             
                 # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     return toBeDeleted
 
+# CHECK WHEN BULLET MEET ENNEMY RADOMLY=====================
 def bulletMeetEnnemy():
     meetEnemy = playerBulletMeetEnnemy(listOfPlayerBullet, listOfEnemies)
     if len(meetEnemy) > 0:
@@ -293,23 +299,27 @@ def bulletMeetEnnemy():
         canvas.delete(meetEnemy[1])
         scoreIncrement()
 
+#CHECK WHEN BULLET OF THE ENNEMY MEET PLAYER===========
 def bulletMeetPlayer():
-    global minusPlayerLives, game_lost 
+    global minusPlayerLives, shooted
     if minusPlayerLives != -5:
         minusPlayerLives -= 1
         canvas.itemconfig(listOfPlayerLives[minusPlayerLives], fill="")
     else:
         displayLost()
+        shooted = False
 
-
-
+# DELETE BULLET OF ENNEMY AFTER TOUCH PLAYER===================================
 def deleteEnnemyBullet():
     listOfEnnemyBullet.remove(ennemyBullet)
     canvas.delete(ennemyBullet)
 
-def deleteEnnemy():
+# DELETE ENNEMY AFTER TOUCH PLAYER AND TOUCH BULLET OF THE PLAYER================================
+def deleteEnnemy(ennemy):
     listOfEnemies.remove(ennemy)
     canvas.delete(ennemy)
+
+# INCREMENT SCORE FOR PLAYER WHEN IT TOUCH ENNEMY=============================
 def scoreIncrement():
     global SCORE
     SCORE += 1
