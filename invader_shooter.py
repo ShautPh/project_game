@@ -95,7 +95,7 @@ def in_processing():
     move_ennemy_bullet()
 
 def global_variable():
-    global listOfPlayerLives, minusPlayerLives, listOfEnemies,SCORE,listOfPlayerBullet,listOfEnnemyBullet,posOfEachEnnemy,newEnnemyStartX,newEnnemyStartY,playerStartX,playerStartY,BulletPlayerStartX,BulletPlayerStartY
+    global listOfPlayerLives, minusPlayerLives, listOfEnemies,SCORE,listOfPlayerBullet,listOfEnnemyBullet,posOfEachEnnemy,newEnnemyStartX,newEnnemyStartY,playerStartX,playerStartY,BulletPlayerStartX,BulletPlayerStartY,positionXOfMainEnnemy,positionYOfMainEnnemy
     # # VARIABLES
     # # ----------------------------------------------
     listOfPlayerLives = []
@@ -113,6 +113,8 @@ def global_variable():
     playerStartY = 400
     BulletPlayerStartX = 380
     BulletPlayerStartY = 400
+    positionXOfMainEnnemy = 1200
+    positionYOfMainEnnemy = 650
 
 def displayLost():
     canvas.create_image(1200, 650, anchor=SE, image=game_over)
@@ -224,7 +226,7 @@ def move_player_bullet():
     if minusPlayerLives < 5 and SCORE < 20:
         for bullet in listOfPlayerBullet:
             canvas.move(bullet, 20, 0)
-            winsound.PlaySound("sound/shoot.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+            # winsound.PlaySound("sound/shoot.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
             pos_bullet = canvas.coords(bullet)
             if pos_bullet[0] > 1100:
                 bulletToRemove.append(bullet)
@@ -237,13 +239,13 @@ def move_player_bullet():
 # DISPLAY FIRE WHEN BULLET OF PLAYER TOUCH ENNEMY ================================
 def displayFire():
     positionOfEn = canvas.coords(enemy)
-    winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(positionOfEn[0],positionOfEn[1],image=fire_ennemy,tags="deleteFire")
     canvas.after(300,disappearFire)
 
 # DISPLAY FIRE WHEN PLAYER TOUCH ENNEMY ================================
 def displayFirePlayer():
-    winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(getPlayerPosition()[0]+80,getPlayerPosition()[1],image=fire_player,tags="deleteFire")
     canvas.after(300,disappearFire)
 def disappearFire():
@@ -253,6 +255,7 @@ def disappearFire():
 def playerBulletMeetEnnemy(listOfPlayerBullets, listOfEnemies):
     global enemy
     toBeDeleted = []
+    # posMainEnnemy = canvas.coords(main_ennemy)
     for playerBullet in listOfPlayerBullets:
         positionOfBulletPlayer = canvas.coords(playerBullet)
         for enemy in listOfEnemies:
@@ -261,6 +264,8 @@ def playerBulletMeetEnnemy(listOfPlayerBullets, listOfEnemies):
                 toBeDeleted.append(playerBullet)
                 toBeDeleted.append(enemy)
                 displayFire()
+            # if SCORE == 2  and (positionOfBulletPlayer[1]+BULLET_SIZE >= posMainEnnemy[1]) and (positionOfBulletPlayer[1]+BULLET_SIZE <= posMainEnnemy[1]+ENNEMY_SIZE ) and (positionOfBulletPlayer[0]+BULLET_SIZE >= posMainEnnemy[0]) and (positionOfBulletPlayer[0]+BULLET_SIZE <= posMainEnnemy[0]+ENNEMY_SIZE):
+            #     displayFire()
     return toBeDeleted
 
 # TO CHECK IF ENNEMY BULLET MEET PLAYER========================================
@@ -299,7 +304,7 @@ def bulletMeetEnnemy():
 
 # TO MINUS LIVE OF THE PLAYER WHENEVER TOUCHED ENNEMY OR BULLET OF THE ENNEMY====
 def bulletMeetPlayer():
-    global minusPlayerLives, SCORE
+    global minusPlayerLives
     minusPlayerLives += 1
     canvas.itemconfig(listOfPlayerLives[-minusPlayerLives], fill="")
     if minusPlayerLives == 5:
@@ -324,50 +329,67 @@ def scoreIncrement():
         title = "SCORES: "
     canvas.itemconfig(player_socre,text= title + str(SCORE))
     if SCORE == 20:
-        canvas.after(500,displayWin)
+        canvas.after(200,displayWin)
     if SCORE == 2:
         appear_main_ennemy()
 
 # APPEAR MAIN ENNEMY TO ATTACK WITH PLAYER===================
 def appear_main_ennemy():
-    global main_ennemy,listLiveOfEnnemy,listOfMainEnnemyBullet
-    main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
+    global main_ennemy,listLiveOfEnnemy,listOfMainEnnemyBullet,positionXOfMainEnnemy,positionYOfMainEnnemy
+    main_ennemy = canvas.create_image(positionXOfMainEnnemy, positionYOfMainEnnemy, anchor=SE, image= main_ennemy_image)
     listLiveOfEnnemy = []
     listOfMainEnnemyBullet = []
-    x = 860
-    for i in range(10):
-        live = canvas.create_rectangle(x,600,x+30,630,fill="red",outline="",tags="blood")
-        x += 32
+    x = 780
+    for i in range(20):
+        live = canvas.create_rectangle(x,610,x+20,630,fill="red",outline="",tags="blood")
+        x += 20
         listLiveOfEnnemy.append(live)
-    # create_main_ennemy_bullet()
+    create_main_ennemy_bullet()
     move_main_ennemy_up()
+    move_main_ennemy_bullet()
 
 # MOVE MAIN ENNEMY UP========================
 def move_main_ennemy_up():
-    posMainEnnemy = canvas.coords(main_ennemy)
-    if posMainEnnemy[1] <= 650 and posMainEnnemy[1] > 300:
-        canvas.move(main_ennemy,-2,-10)
-        canvas.after(100,move_main_ennemy_up)
-    else: 
-        move_main_ennemy_down()
+    if SCORE < 20:
+        posMainEnnemy = canvas.coords(main_ennemy)
+        if posMainEnnemy[1] <= 650 and posMainEnnemy[1] > 250 and SCORE < 20:
+            canvas.move(main_ennemy,-2,-10)
+            canvas.after(100,move_main_ennemy_up)
+        else: 
+            move_main_ennemy_down()
 
 # MOVE MAIN ENNEMY DOWN ===================================
 def move_main_ennemy_down():
-    posMainEnnemy = canvas.coords(main_ennemy)
-    if posMainEnnemy[1] < 650 and posMainEnnemy[1] >= 300:
-        canvas.move(main_ennemy,2,10)
-        canvas.after(100,move_main_ennemy_down)
-    else: 
-        move_main_ennemy_up()
+    if SCORE < 20:
+        posMainEnnemy = canvas.coords(main_ennemy)
+        if posMainEnnemy[1] < 650 and posMainEnnemy[1] >= 250:
+            canvas.move(main_ennemy,2,10)
+            canvas.after(100,move_main_ennemy_down)
+        else: 
+            move_main_ennemy_up()
 
 # CREATE BULLET OF THE MAIN ENNEMY ===============================================
-# def create_main_ennemy_bullet():
-#     if SCORE < 20:
-#         posMainEnnemy = canvas.coords(main_ennemy)
-#         main_ennemy_bullet = canvas.create_image(posMainEnnemy[0], posMainEnnemy[1], image=bullet_main_ennemy, tags="player_bullet")
-#         listOfMainEnnemyBullet.append(main_ennemy_bullet)
-#         canvas.after(500, create_main_ennemy_bullet)
+def create_main_ennemy_bullet():
+    if SCORE < 20:
+        posMainEnnemy = canvas.coords(main_ennemy)
+        main_ennemy_bullet = canvas.create_image(posMainEnnemy[0]-180, posMainEnnemy[1]-180, image=bullet_main_ennemy, tags="player_bullet")
+        listOfMainEnnemyBullet.append(main_ennemy_bullet)
+        canvas.after(500, create_main_ennemy_bullet)
 
+# MOVE BULLET OF MAIN ENNEMY ====================================
+def move_main_ennemy_bullet():
+    bulletToRemove = []
+    if minusPlayerLives < 5 and SCORE < 20:
+        for bullet in listOfMainEnnemyBullet:
+            canvas.move(bullet, -20, 0)
+            # winsound.PlaySound("sound/shoot.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+            pos_bullet = canvas.coords(bullet)
+            if pos_bullet[0] < 100:
+                bulletToRemove.append(bullet)
+        for bullet in bulletToRemove:
+            listOfMainEnnemyBullet.remove(bullet)
+            canvas.delete(bullet)
+        canvas.after(100,move_main_ennemy_bullet)
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
