@@ -47,6 +47,8 @@ main_ennemy_image = tk.PhotoImage(file="./img/main-animy.png")
 display_game = False
 def display_start_game():
     global display_game
+    winsound.PlaySound("sound/start.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    
     if not display_game: 
         canvas.create_image(0,0,anchor=NW, image = bg,tags="start")
         canvas.create_rectangle(378,290,534,350,fill="red",outline="",tags="start")
@@ -117,11 +119,13 @@ def global_variable():
     positionYOfMainEnnemy = 650
 
 def displayLost():
+    winsound.PlaySound("sound/mixkit-player-losing-or-failing-2042.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(1200, 650, anchor=SE, image=game_over)
     canvas.create_text(452,480,text="AGAIN",font=("Purisa", 25, BOLD), fill="white",tags=("startTheGame","start"))
     canvas.create_text(748,480,text="EXIT",font=("Purisa", 25, BOLD), fill="white",tags=("exitTheGame","start"))
 
 def displayWin():
+    winsound.PlaySound("sound/mixkit-game-level-completed-2059.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(1200, 650, anchor=SE, image=game_win)
     canvas.create_text(460,493,text="AGAIN",font=("Purisa", 25, BOLD), fill="white",tags=("startTheGame","start"))
     canvas.create_text(725,493,text="EXIT",font=("Purisa", 25, BOLD), fill="white",tags=("exitTheGame","start"))
@@ -140,6 +144,7 @@ PLAYER_WIDTH = PLAYER_HEIGHT = 45
 # # THE POSITION OF THE PLAYER================================================
 def getPlayerPosition():
     return canvas.coords(player_pos)
+
 # MOVE POSITION PLAYER BY USING KEY PRESS=====================================
 def onWPressed(event):
     goUp()
@@ -219,6 +224,8 @@ def move_ennemy_bullet():
             canvas.delete(bullet_ennemy)
         ennemyBulletMeetPlayer(listOfEnnemyBullet)
         canvas.after(100,move_ennemy_bullet)
+        winsound.PlaySound("sound/shooting.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+        
 
 # MOVE BULLET OF PLAYER TO THE ENNEMIES ==============================
 def move_player_bullet():
@@ -234,18 +241,21 @@ def move_player_bullet():
             listOfPlayerBullet.remove(bullet)
             canvas.delete(bullet)
         bulletMeetEnnemy()
+        # if SCORE > 2:
+        #     bulletMeetMainEnnemy()
         canvas.after(100,move_player_bullet)
 
 # DISPLAY FIRE WHEN BULLET OF PLAYER TOUCH ENNEMY ================================
 def displayFire():
     positionOfEn = canvas.coords(enemy)
-    # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    winsound.PlaySound("sound/bomb.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    # winsound.PlaySound("sound/bomb.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(positionOfEn[0],positionOfEn[1],image=fire_ennemy,tags="deleteFire")
     canvas.after(300,disappearFire)
 
 # DISPLAY FIRE WHEN PLAYER TOUCH ENNEMY ================================
 def displayFirePlayer():
-    # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+    winsound.PlaySound("sound/bomb.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
     canvas.create_image(getPlayerPosition()[0]+80,getPlayerPosition()[1],image=fire_player,tags="deleteFire")
     canvas.after(300,disappearFire)
 def disappearFire():
@@ -397,7 +407,30 @@ def move_main_ennemy_bullet():
             canvas.delete(bullet)
         canvas.after(100,move_main_ennemy_bullet)
     return toBeDeleted
+# TO CHECK IF BULLET PLAYER MEET MAIN ENNEMY==========================
+def playerBulletMeetMainEn(listOfPlayerBullet):
+    toBeDeleted = []
+    for playerBullet in listOfPlayerBullet:
+        posBullet = canvas.coords(playerBullet)
+        positionOfMainEn = canvas.coords(main_ennemy)
+        if (positionOfMainEn>=posBullet[1]) and (positionOfMainEn[1]+330 <= posBullet[1]+59) and (positionOfMainEn[0]+330>= posBullet[0]) and (positionOfMainEn[0]+330 <= posBullet[0]+59):
+            print("touch")
+            toBeDeleted.append(playerBullet)
+            bulletMeetPlayer()
+            displayFirePlayer()
+            deleteEnnemyBullet(playerBullet)
+    return toBeDeleted
 
+def bulletMeetMainEnnemy():
+    meetEnemy = playerBulletMeetMainEn(listOfPlayerBullet)
+    print(meetEnemy)
+    if len(meetEnemy) > 0:
+        print("hi")
+        listOfPlayerBullet.remove(meetEnemy[0])
+        listOfEnemies.remove(meetEnemy[1])
+        canvas.delete(meetEnemy[0])
+        canvas.delete(meetEnemy[1])
+        scoreIncrement()
 # def displayFirePlayer():
 #     # winsound.PlaySound("sound/explosion.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
 #     canvas.create_image(getPlayerPosition()[0]+80,getPlayerPosition()[1],image=fire_player,tags="deleteFire")
