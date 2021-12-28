@@ -343,13 +343,15 @@ def appear_main_ennemy():
     move_main_ennemy()
 
 def move_main_ennemy():
+    a = True
     posMainEnnemy = canvas.coords(main_ennemy)
     if posMainEnnemy[1] <= 650 and posMainEnnemy[1] > 300:
         canvas.move(main_ennemy,0,-10)
-    elif posMainEnnemy[1] >= 300 and posMainEnnemy[1] < 650: 
+    elif posMainEnnemy[1] <= 700: 
         canvas.move(main_ennemy,0,10)
     canvas.after(100,move_main_ennemy)
     print(posMainEnnemy[1])
+
 # CREATE BULLET OF THE MAIN ENNEMY ===============================================
 # def create_main_ennemy_bullet():
 #     main_ennemy_bullet = canvas.create_image(getPlayerPosition()[0] + 80, getPlayerPosition()[1], image=bullet_player, tags="player_bullet")
