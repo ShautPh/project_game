@@ -81,7 +81,6 @@ def in_processing():
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
     positionXOfPlayer = random.randrange(100,400)
     positionYOfPlayer = random.randrange(100,400)
-    # CALL THE FUNCTION TO PROGRESS=========================================
     x = 86
     for i in range(5):
         live = canvas.create_rectangle(x,22,x+40,50,fill="red",outline="",tags="blood")
@@ -89,8 +88,7 @@ def in_processing():
         listOfPlayerLives.append(live)
     player_socre = canvas.create_text(160,100,text="SCORE: 0",font=("Purisa", 16, BOLD), fill="white",tags=("startTheGame","start"))
     player_pos = canvas.create_image(positionXOfPlayer, positionYOfPlayer, image=player)  
-    # if minusPlayerLives < -4:
-    #     displayLost()
+    # CALL THE FUNCTION TO PROGRESS=========================================
     create_enemy()
     move_enemies()
     create_player_bullet()
@@ -98,15 +96,13 @@ def in_processing():
     move_ennemy_bullet()
 
 def global_variable():
-    global listOfPlayerLives, minusPlayerLives, listOfEnemies,SCORE,shooted,game_lost,listOfPlayerBullet,listOfEnnemyBullet,posOfEachEnnemy,newEnnemyStartX,newEnnemyStartY,playerStartX,playerStartY,BulletPlayerStartX,BulletPlayerStartY
+    global listOfPlayerLives, minusPlayerLives, listOfEnemies,SCORE,listOfPlayerBullet,listOfEnnemyBullet,posOfEachEnnemy,newEnnemyStartX,newEnnemyStartY,playerStartX,playerStartY,BulletPlayerStartX,BulletPlayerStartY
     # # VARIABLES
     # # ----------------------------------------------
     listOfPlayerLives = []
     minusPlayerLives = 0
     listOfEnemies = []
     SCORE = 0 
-    shooted = False
-    game_lost = False
     listOfEnemies = []
     listOfPlayerBullet = []
     listOfEnnemyBullet = []
@@ -309,10 +305,12 @@ def bulletMeetPlayer():
     canvas.itemconfig(listOfPlayerLives[-minusPlayerLives], fill="")
     if minusPlayerLives == 5:
         canvas.after(500,displayLost)
-    # elif minusPlayerLives > -5 and SCORE == 10 : 
-    #     displayWin()
+    elif minusPlayerLives < 5 and SCORE == 2:
+        appear_main_ennemy() 
 
-
+def appear_main_ennemy(): 
+    global main_ennemy
+    main_ennemy = canvas.create_image(800,200, image=main_ennemy_image)
 # TO DELETE=============================================
 def deleteEnnemyBullet(ennemyBullet):
     listOfEnnemyBullet.remove(ennemyBullet)
