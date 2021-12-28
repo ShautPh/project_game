@@ -121,8 +121,8 @@ def displayLost():
 
 def displayWin():
     canvas.create_image(1200, 650, anchor=SE, image=game_win)
-    canvas.create_text(452,480,text="AGAIN",font=("Purisa", 30, BOLD), fill="white",tags=("startTheGame","start"))
-    canvas.create_text(744,480,text="EXIT",font=("Purisa", 30, BOLD), fill="white",tags=("exitTheGame","start"))
+    canvas.create_text(460,493,text="AGAIN",font=("Purisa", 25, BOLD), fill="white",tags=("startTheGame","start"))
+    canvas.create_text(725,493,text="EXIT",font=("Purisa", 25, BOLD), fill="white",tags=("exitTheGame","start"))
 
 # # ----------------------------------------------
 # # CONSTANTS
@@ -339,9 +339,10 @@ def appear_main_ennemy():
         live = canvas.create_rectangle(x,600,x+30,630,fill="red",outline="",tags="blood")
         x += 32
         listLiveOfEnnemy.append(live)
-    create_main_ennemy_bullet()
+    # create_main_ennemy_bullet()
     move_main_ennemy_up()
 
+# MOVE MAIN ENNEMY UP========================
 def move_main_ennemy_up():
     posMainEnnemy = canvas.coords(main_ennemy)
     if posMainEnnemy[1] <= 650 and posMainEnnemy[1] > 300:
@@ -350,6 +351,7 @@ def move_main_ennemy_up():
     else: 
         move_main_ennemy_down()
 
+# MOVE MAIN ENNEMY DOWN ===================================
 def move_main_ennemy_down():
     posMainEnnemy = canvas.coords(main_ennemy)
     if posMainEnnemy[1] < 650 and posMainEnnemy[1] >= 300:
@@ -357,13 +359,14 @@ def move_main_ennemy_down():
         canvas.after(100,move_main_ennemy_down)
     else: 
         move_main_ennemy_up()
+
 # CREATE BULLET OF THE MAIN ENNEMY ===============================================
-def create_main_ennemy_bullet():
-    posMainEnnemy = canvas.coords(main_ennemy)
-    main_ennemy_bullet = canvas.create_image(posMainEnnemy[0], posMainEnnemy[1], image=bullet_main_ennemy, tags="player_bullet")
-    listOfMainEnnemyBullet.append(main_ennemy_bullet)
-    canvas.after(500, create_main_ennemy_bullet)
-    print(listOfMainEnnemyBullet)
+# def create_main_ennemy_bullet():
+#     if SCORE < 20:
+#         posMainEnnemy = canvas.coords(main_ennemy)
+#         main_ennemy_bullet = canvas.create_image(posMainEnnemy[0], posMainEnnemy[1], image=bullet_main_ennemy, tags="player_bullet")
+#         listOfMainEnnemyBullet.append(main_ennemy_bullet)
+#         canvas.after(500, create_main_ennemy_bullet)
 
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
