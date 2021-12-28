@@ -223,6 +223,7 @@ def move_enemies():
             canvas.delete(ennemy)
         ennemyMeetPlayer(listOfEnemies)
         canvas.after(100,move_enemies)
+    return ennemiesToBeDeleted
 
 # CREATE THE BULLET OF THE PLAYER TO DISPLAY ON SCREEN ===================
 def create_player_bullet():
