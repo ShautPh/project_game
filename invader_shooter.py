@@ -122,8 +122,8 @@ def displayLost():
 
 def displayWin():
     canvas.create_image(1200, 650, anchor=SE, image=game_win)
-    canvas.create_text(452,480,text="AGAIN",font=("Purisa", 30, BOLD), fill="white",tags=("startTheGame","start"))
-    canvas.create_text(744,480,text="EXIT",font=("Purisa", 30, BOLD), fill="white",tags=("exitTheGame","start"))
+    canvas.create_text(460,493,text="AGAIN",font=("Purisa", 25, BOLD), fill="white",tags=("startTheGame","start"))
+    canvas.create_text(725,493,text="EXIT",font=("Purisa", 25, BOLD), fill="white",tags=("exitTheGame","start"))
 
 # # ----------------------------------------------
 # # CONSTANTS
