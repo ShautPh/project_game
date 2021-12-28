@@ -5,8 +5,7 @@ import random
 from tkinter.constants import ANCHOR, COMMAND, NW, SE, TRUE, W
 from tkinter.font import BOLD 
 import winsound
-
-
+import time
 
 # ----------------------------------------------
 # TKINTER GRAPHICS
@@ -329,17 +328,33 @@ def scoreIncrement():
     if SCORE == 2:
         appear_main_ennemy()
 
+# APPEAR MAIN ENNEMY TO ATTACK WITH PLAYER===================
 def appear_main_ennemy():
-    global main_ennemy
+    global main_ennemy,listLiveOfEnnemy,listOfMainEnnemyBullet
     main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
     listLiveOfEnnemy = []
+    listOfMainEnnemyBullet = []
     x = 860
     for i in range(10):
         live = canvas.create_rectangle(x,600,x+30,630,fill="red",outline="",tags="blood")
         x += 32
         listLiveOfEnnemy.append(live)
+    # create_main_ennemy_bullet()
+    move_main_ennemy()
 
-
+def move_main_ennemy():
+    posMainEnnemy = canvas.coords(main_ennemy)
+    if posMainEnnemy[1] <= 650 and posMainEnnemy[1] > 300:
+        canvas.move(main_ennemy,0,-10)
+    elif posMainEnnemy[1] >= 300 and posMainEnnemy[1] < 650: 
+        canvas.move(main_ennemy,0,10)
+    canvas.after(100,move_main_ennemy)
+    print(posMainEnnemy[1])
+# CREATE BULLET OF THE MAIN ENNEMY ===============================================
+# def create_main_ennemy_bullet():
+#     main_ennemy_bullet = canvas.create_image(getPlayerPosition()[0] + 80, getPlayerPosition()[1], image=bullet_player, tags="player_bullet")
+#     listOfPlayerBullet.append(main_ennemy_bullet)
+#     canvas.after(500, create_main_ennemy_bullet)
 
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
