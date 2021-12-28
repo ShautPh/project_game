@@ -76,9 +76,8 @@ def loading_the_process():
 
 #GAME IN PROCESSING-------------------------------------------
 def in_processing():
-    global player_pos,bullet_of_player,player_socre,battle_image, minusPlayerLives, listOfEnemies
-    minusPlayerLives = 0
-    listOfEnemies = []
+    global player_pos,player_socre,battle_image
+    global_variable()
     battle_image = canvas.create_image(1200, 650, anchor=SE, image=bg_game)
     positionXOfPlayer = random.randrange(100,400)
     positionYOfPlayer = random.randrange(100,400)
@@ -92,11 +91,33 @@ def in_processing():
     player_pos = canvas.create_image(positionXOfPlayer, positionYOfPlayer, image=player)  
     # if minusPlayerLives < -4:
     #     displayLost()
-    canvas.after(500,create_enemy)
-    canvas.after(500,move_enemies)
-    canvas.after(500, create_player_bullet)
-    canvas.after(500, move_player_bullet)
-    canvas.after(500, move_ennemy_bullet)
+    create_enemy()
+    move_enemies()
+    create_player_bullet()
+    move_player_bullet()
+    move_ennemy_bullet()
+
+def global_variable():
+    global listOfPlayerLives, minusPlayerLives, listOfEnemies,SCORE,shooted,game_lost,listOfPlayerBullet,listOfEnnemyBullet,posOfEachEnnemy,newEnnemyStartX,newEnnemyStartY,playerStartX,playerStartY,BulletPlayerStartX,BulletPlayerStartY
+    # # VARIABLES
+    # # ----------------------------------------------
+    listOfPlayerLives = []
+    minusPlayerLives = 0
+    listOfEnemies = []
+    SCORE = 0 
+    shooted = False
+    game_lost = False
+    listOfEnemies = []
+    listOfPlayerBullet = []
+    listOfEnnemyBullet = []
+    listOfPlayerLives = []
+    posOfEachEnnemy = []
+    newEnnemyStartX = 1200
+    newEnnemyStartY = 30
+    playerStartX = 300
+    playerStartY = 400
+    BulletPlayerStartX = 380
+    BulletPlayerStartY = 400
 
 def displayLost():
     canvas.create_image(1200, 650, anchor=SE, image=game_over)
@@ -118,22 +139,6 @@ BULLET_SIZE = 59
 ENNEMY_SIZE = 95
 PLAYER_WIDTH = PLAYER_HEIGHT = 45
 # # ----------------------------------------------
-# # VARIABLES
-# # ----------------------------------------------
-newEnnemyStartX = 1200
-newEnnemyStartY = 30
-playerStartX = 300
-playerStartY = 400
-BulletPlayerStartX = 380
-BulletPlayerStartY = 400
-posOfEachEnnemy = []
-shooted = False
-game_lost = False
-listOfEnemies = []
-listOfPlayerBullet = []
-listOfEnnemyBullet = []
-listOfPlayerLives = []
-minusPlayerLives = 0
 
 # # THE POSITION OF THE PLAYER================================================
 def getPlayerPosition():
@@ -169,16 +174,17 @@ def goRight():
 # CREATE THE ENNEMIES AND THEIR BULLET TO DISPLAY ON SCREEN ===================
 def create_enemy():
     global newEnnemyStartY
-    numberEnnemyOnce = random.randrange(6,12)
-    if len(listOfEnemies) < numberEnnemyOnce and minusPlayerLives < 5:
-        newEnnemyStartY =random.randrange(20,500)
-        ennemyImage = random.choice(ENNEMY_IMAGES)
-        newEnemy = canvas.create_image(newEnnemyStartX,newEnnemyStartY,image=ennemyImage)
-        listOfEnemies.append(newEnemy)
-        bullet_of_ennemy = canvas.create_image(newEnnemyStartX, newEnnemyStartY, image=bullet_ennemy)
-        listOfEnnemyBullet.append(bullet_of_ennemy)
-    newEnnemyStartY = 30
-    canvas.after(1000, create_enemy)
+    numberEnnemyOnce = random.randrange(6,7)
+    if minusPlayerLives < 5:
+        if len(listOfEnemies) < numberEnnemyOnce:
+            newEnnemyStartY =random.randrange(20,500)
+            ennemyImage = random.choice(ENNEMY_IMAGES)
+            newEnemy = canvas.create_image(newEnnemyStartX,newEnnemyStartY,image=ennemyImage)
+            listOfEnemies.append(newEnemy)
+            bullet_of_ennemy = canvas.create_image(newEnnemyStartX, newEnnemyStartY, image=bullet_ennemy)
+            listOfEnnemyBullet.append(bullet_of_ennemy)
+        newEnnemyStartY = 30
+        canvas.after(1000, create_enemy)
 
 # MOVE POSITION OF THE ENNEMIES TO ANYWHERE===========================
 def move_enemies():
@@ -302,7 +308,7 @@ def bulletMeetPlayer():
     minusPlayerLives += 1
     canvas.itemconfig(listOfPlayerLives[-minusPlayerLives], fill="")
     if minusPlayerLives == 5:
-        displayLost()
+        canvas.after(500,displayLost)
     # elif minusPlayerLives > -5 and SCORE == 10 : 
     #     displayWin()
 
@@ -332,20 +338,6 @@ def scoreIncrement():
 #     global main_ennemy
 #     main_ennemy = canvas.create_image(1200, 650, anchor=SE, image= main_ennemy_image)
 #     move_main_ennemy()
-
-# def move_main_ennemy():
-#     canvas.move(main_ennemy,-50,0)
-#     canvas.after(3000,move_main_ennemy_go_right)
-# def move_main_ennemy_go_right():
-#     canvas.move(main_ennemy,50,0)
-#     canvas.after(3000,move_main_ennemy_go_Down)
-# def move_main_ennemy_go_Down():
-#     canvas.move(main_ennemy,0,40)
-#     canvas.after(3000,move_main_ennemy_go_up)
-# def move_main_ennemy_go_up():
-#     canvas.move(main_ennemy,0,-40)
-#     canvas.after(3000,move_main_ennemy)
-#     canvas.after(100,move_main_ennemy)
 
 
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
