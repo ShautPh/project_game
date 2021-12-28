@@ -34,7 +34,7 @@ player_win = tk.PhotoImage(file="./img/win-game.png")
 bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BULLET ()
 # PLAYER BULLET.......................
 bullet_ennemy = tk.PhotoImage(file="./img/bullet_ennemy.png") #SIZE OF PLAYER BULLET (45x45)
-bullet_main_ennemy = tk.PhotoImage(file="./img/bullet_main_enimy.png") #SIZE OF PLAYER BULLET (45x45)
+bullet_main_ennemy = tk.PhotoImage(file="./img/bullet_main_enimy.png") #SIZE OF PLAYER BULLET (99x99)
 # FIRE
 fire_ennemy = tk.PhotoImage(file="./img/fire.png")
 fire_player = tk.PhotoImage(file="./img/fire_player.png")
@@ -95,7 +95,7 @@ def in_processing():
     move_ennemy_bullet()
 
 def global_variable():
-    global listOfPlayerLives, minusPlayerLives, listOfEnemies,SCORE,listOfPlayerBullet,listOfEnnemyBullet,posOfEachEnnemy,newEnnemyStartX,newEnnemyStartY,playerStartX,playerStartY,BulletPlayerStartX,BulletPlayerStartY
+    global listOfPlayerLives, minusPlayerLives, listOfEnemies,SCORE,listOfPlayerBullet,listOfEnnemyBullet,posOfEachEnnemy,newEnnemyStartX,newEnnemyStartY,playerStartX,playerStartY,BulletPlayerStartX,BulletPlayerStartY,listOfMainEnnemyBullet
     # # VARIABLES
     # # ----------------------------------------------
     listOfPlayerLives = []
@@ -104,6 +104,7 @@ def global_variable():
     SCORE = 0 
     listOfEnemies = []
     listOfPlayerBullet = []
+    listOfMainEnnemyBullet = []
     listOfEnnemyBullet = []
     listOfPlayerLives = []
     posOfEachEnnemy = []
@@ -138,6 +139,8 @@ PLAYER_WIDTH = PLAYER_HEIGHT = 45
 # # THE POSITION OF THE PLAYER================================================
 def getPlayerPosition():
     return canvas.coords(player_pos)
+def getMainEnPosition():
+    return canvas.coords(bullet_main_ennemy)
 # MOVE POSITION PLAYER BY USING KEY PRESS=====================================
 def onWPressed(event):
     goUp()
@@ -341,6 +344,9 @@ def appear_main_ennemy():
         listLiveOfEnnemy.append(live)
     # create_main_ennemy_bullet()
     move_main_ennemy_up()
+    create_main_ennemy_bullet()
+    # create_main_ennemy_bullet()
+    move_main_ennemy_bullet
 
 # MOVE MAIN ENNEMY UP========================
 def move_main_ennemy_up():
@@ -348,9 +354,9 @@ def move_main_ennemy_up():
     if posMainEnnemy[1] <= 650 and posMainEnnemy[1] > 300:
         canvas.move(main_ennemy,-2,-10)
         canvas.after(100,move_main_ennemy_up)
-    else: 
-        move_main_ennemy_down()
-
+    if posMainEnnemy[1] < 650 and posMainEnnemy[1] >= 300:
+        canvas.move(main_ennemy,2,10)
+        canvas.after(100,move_main_ennemy_down)
 # MOVE MAIN ENNEMY DOWN ===================================
 def move_main_ennemy_down():
     posMainEnnemy = canvas.coords(main_ennemy)
@@ -359,6 +365,29 @@ def move_main_ennemy_down():
         canvas.after(100,move_main_ennemy_down)
     else: 
         move_main_ennemy_up()
+
+
+def create_main_ennemy_bullet():
+    if minusPlayerLives < 5 and SCORE < 20:
+        bullets = canvas.create_image(500, 600, image=bullet_main_ennemy)
+        listOfMainEnnemyBullet.append(bullets)
+        canvas.after(500, create_main_ennemy_bullet)
+
+def move_main_ennemy_bullet():
+    bulletToRemove = []
+    if minusPlayerLives < 5 and SCORE < 20:
+        for bullets in listOfMainEnnemyBullet:
+            canvas.move(bullets, -20, 0)
+            winsound.PlaySound("sound/shoot.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
+            pos_bullet = canvas.coords(bullets)
+            if pos_bullet[0] < 50:
+                bulletToRemove.append(bullets)
+        for bullet in bulletToRemove:
+            listOfPlayerBullet.remove(bullet)
+            canvas.delete(bullet)
+        # bulletMeetEnnemy()
+        canvas.after(100,move_main_ennemy_bullet)
+
 
 # CREATE BULLET OF THE MAIN ENNEMY ===============================================
 # def create_main_ennemy_bullet():
