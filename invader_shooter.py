@@ -5,7 +5,6 @@ import random
 from tkinter.constants import ANCHOR, COMMAND, NW, SE, TRUE, W
 from tkinter.font import BOLD 
 import winsound
-import time
 
 # ----------------------------------------------
 # TKINTER GRAPHICS
@@ -35,6 +34,7 @@ player_win = tk.PhotoImage(file="./img/win-game.png")
 bullet_player = tk.PhotoImage(file="./img/bullet_player.png") #SIZE OF PLAYER BULLET ()
 # PLAYER BULLET.......................
 bullet_ennemy = tk.PhotoImage(file="./img/bullet_ennemy.png") #SIZE OF PLAYER BULLET (45x45)
+bullet_main_ennemy = tk.PhotoImage(file="./img/bullet_main_enimy.png") #SIZE OF PLAYER BULLET (45x45)
 # FIRE
 fire_ennemy = tk.PhotoImage(file="./img/fire.png")
 fire_player = tk.PhotoImage(file="./img/fire_player.png")
@@ -339,22 +339,31 @@ def appear_main_ennemy():
         live = canvas.create_rectangle(x,600,x+30,630,fill="red",outline="",tags="blood")
         x += 32
         listLiveOfEnnemy.append(live)
-    # create_main_ennemy_bullet()
-    move_main_ennemy()
+    create_main_ennemy_bullet()
+    move_main_ennemy_up()
 
-def move_main_ennemy():
+def move_main_ennemy_up():
     posMainEnnemy = canvas.coords(main_ennemy)
     if posMainEnnemy[1] <= 650 and posMainEnnemy[1] > 300:
-        canvas.move(main_ennemy,0,-10)
-    elif posMainEnnemy[1] >= 300 and posMainEnnemy[1] < 650: 
-        canvas.move(main_ennemy,0,10)
-    canvas.after(100,move_main_ennemy)
-    print(posMainEnnemy[1])
+        canvas.move(main_ennemy,-2,-10)
+        canvas.after(100,move_main_ennemy_up)
+    else: 
+        move_main_ennemy_down()
+
+def move_main_ennemy_down():
+    posMainEnnemy = canvas.coords(main_ennemy)
+    if posMainEnnemy[1] < 650 and posMainEnnemy[1] >= 300:
+        canvas.move(main_ennemy,2,10)
+        canvas.after(100,move_main_ennemy_down)
+    else: 
+        move_main_ennemy_up()
 # CREATE BULLET OF THE MAIN ENNEMY ===============================================
-# def create_main_ennemy_bullet():
-#     main_ennemy_bullet = canvas.create_image(getPlayerPosition()[0] + 80, getPlayerPosition()[1], image=bullet_player, tags="player_bullet")
-#     listOfPlayerBullet.append(main_ennemy_bullet)
-#     canvas.after(500, create_main_ennemy_bullet)
+def create_main_ennemy_bullet():
+    posMainEnnemy = canvas.coords(main_ennemy)
+    main_ennemy_bullet = canvas.create_image(posMainEnnemy[0], posMainEnnemy[1], image=bullet_main_ennemy, tags="player_bullet")
+    listOfMainEnnemyBullet.append(main_ennemy_bullet)
+    canvas.after(500, create_main_ennemy_bullet)
+    print(listOfMainEnnemyBullet)
 
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
