@@ -47,8 +47,7 @@ main_ennemy_image = tk.PhotoImage(file="./img/main-animy.png") #SIZE OF ENNEMY (
 display_game = False
 def display_start_game():
     global display_game
-    winsound.PlaySound("sound/start.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)
-    
+    winsound.PlaySound("sound/start.wav",winsound.SND_FILENAME | winsound.SND_ASYNC)  
     if not display_game: 
         canvas.create_image(0,0,anchor=NW, image = bg,tags="start")
         canvas.create_rectangle(378,290,534,350,fill="red",outline="",tags="start")
