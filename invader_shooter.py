@@ -156,13 +156,17 @@ def getPlayerPosition():
 
 # MOVE POSITION PLAYER BY USING KEY PRESS=====================================
 def onWPressed(event):
-    goUp()
+    if display_game:
+        goUp()
 def onSPressed(event):
-    goDown()
+    if display_game:
+        goDown()
 def onAPressed(event):
-    goLeft()
+    if display_game:
+        goLeft()
 def onDPressed(event):
-    goRight()
+    if display_game:
+        goRight()
 
 # MOVE POSITION BULLET BY USING KEY PRESS=====================================
 #==============================================================================
@@ -218,6 +222,7 @@ def move_enemies():
             canvas.delete(ennemy)
         ennemyMeetPlayer(listOfEnemies)
         canvas.after(100,move_enemies)
+    return ennemiesToBeDeleted
 
 # CREATE THE BULLET OF THE PLAYER TO DISPLAY ON SCREEN ===================
 def create_player_bullet():
@@ -304,6 +309,7 @@ def ennemyBulletMeetPlayer(listOfEnnemyBullet):
 
 # CHECK WHEN THE PLAYER MEET WITH ENNEMY ==========================================
 def ennemyMeetPlayer(listOfEnemies):
+    global positionOfEnnemy
     toBeDeleted = []
     for ennemy in listOfEnemies:
         positionOfEnnemy = canvas.coords(ennemy)
@@ -344,18 +350,16 @@ def deleteEnnemy(ennemy):
 
 # INCREMENT SOCRE FOR PLAYER WHEN ITS BULLET TOUCH ENNEMY=========================
 def scoreIncrement():
-    global SCORE,stopTheGame
+    global SCORE,stopTheGame,positionOfEnnemy
     SCORE += 1
     if SCORE <= 1: 
         title = "SCORE: "
     else:
         title = "SCORES: "
     canvas.itemconfig(player_socre,text= title + str(SCORE))
-    if NUMBEROFALLENEMY == 0 and len(listOfEnemies) == 0 :
+    if NUMBEROFALLENEMY == 0:
         stopTheGame = False
         canvas.after(500,displayWin)
-
-
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
