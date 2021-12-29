@@ -337,7 +337,7 @@ def bulletMeetPlayer():
     canvas.itemconfig(listOfPlayerLives[-minusPlayerLives], fill="")
     if minusPlayerLives == 5:
         stopTheGame = False
-        canvas.after(500,displayLost)
+        canvas.after(1000,displayLost)
 
 # TO DELETE=============================================
 def deleteEnnemyBullet(ennemyBullet):
@@ -357,9 +357,9 @@ def scoreIncrement():
     else:
         title = "SCORES: "
     canvas.itemconfig(player_socre,text= title + str(SCORE))
-    if NUMBEROFALLENEMY == 0:
+    if NUMBEROFALLENEMY == 0 and len(listOfEnemies)<1 or( SCORE > 90) :
         stopTheGame = False
-        canvas.after(500,displayWin)
+        canvas.after(1000,displayWin)
 # KEYS THAT PLAYER HAS TO PRESS TO PLAY THE GAME=================================
 window.bind("<w>", onWPressed)
 window.bind("<s>",onSPressed)
